@@ -6,7 +6,7 @@
 
 A high-performance C++ implementation of the Black-Scholes-Merton model for pricing European options with complete Greeks calculations.
 
-## 🎯 Features
+## Features
 
 - **European Options Pricing**: Call and Put options using closed-form Black-Scholes formula
 - **Complete Greeks Suite**: Delta, Gamma, Theta, Vega, and Rho calculations
@@ -15,7 +15,7 @@ A high-performance C++ implementation of the Black-Scholes-Merton model for pric
 - **Clean Architecture**: Object-oriented design with clear separation of concerns
 - **Well-Documented**: Comprehensive inline comments and technical documentation
 
-## 📐 Mathematical Background
+## Mathematical Background
 
 The Black-Scholes model provides analytical solutions for European option pricing under the following assumptions:
 - Log-normal distribution of asset prices
