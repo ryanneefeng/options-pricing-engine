@@ -12,11 +12,11 @@ const double M_SQRT1_2 = 0.7071067811865476;
  */
 Option::Option(double stock_price, double strike_price, double time_to_maturity,
                double risk_free_rate, double volatility)
-    : S(stock_price), K(strike_price), T(time_to_maturity),
-      r(risk_free_rate), sigma(volatility) {
+    	: S(stock_price), K(strike_price), T(time_to_maturity),
+      	r(risk_free_rate), sigma(volatility) {
     
     if (!validate_inputs()) {
-        throw std::invalid_argument("Invalid option parameters");
+	throw std::invalid_argument("Invalid option parameters");
     }
 }
 
@@ -24,25 +24,25 @@ Option::Option(double stock_price, double strike_price, double time_to_maturity,
  * Validate all input parameters
  */
 bool Option::validate_inputs() const {
-    if (S <= 0) {
-        throw std::invalid_argument("Stock price must be positive");
-    }
-    if (K <= 0) {
-        throw std::invalid_argument("Strike price must be positive");
-    }
-    if (T < 0) {
-        throw std::invalid_argument("Time to maturity cannot be negative");
-    }
-    if (T == 0) {
-        throw std::invalid_argument("Time to maturity cannot be zero (option expired)");
-    }
-    if (sigma < 0) {
-        throw std::invalid_argument("Volatility cannot be negative");
-    }
-    if (sigma == 0) {
-        throw std::invalid_argument("Volatility cannot be zero");
-    }
-    return true;
+	if (S <= 0) {
+       		throw std::invalid_argument("Stock price must be positive");
+    	}
+    	if (K <= 0) {
+        	throw std::invalid_argument("Strike price must be positive");
+    	}
+    	if (T < 0) {
+        	throw std::invalid_argument("Time to maturity cannot be negative");
+    	}
+   	if (T == 0) {
+        	throw std::invalid_argument("Time to maturity cannot be zero (option expired)");
+    	}
+    	if (sigma < 0) {
+        	throw std::invalid_argument("Volatility cannot be negative");
+    	}
+    	if (sigma == 0) {
+        	throw std::invalid_argument("Volatility cannot be zero");
+    	}
+    	return true;
 }
 
 /**
@@ -50,7 +50,7 @@ bool Option::validate_inputs() const {
  * d1 = [ln(S/K) + (r + sigma²/2)T] / (sigma * sqrt(T))
  */
 double Option::d1() const {
-    return (log(S / K) + (r + 0.5 * sigma * sigma) * T) / (sigma * sqrt(T));
+    	return (log(S / K) + (r + 0.5 * sigma * sigma) * T) / (sigma * sqrt(T));
 }
 
 /**
@@ -58,7 +58,7 @@ double Option::d1() const {
  * d2 = d1 - sigma * sqrt(T)
  */
 double Option::d2() const {
-    return d1() - sigma * sqrt(T);
+    	return d1() - sigma * sqrt(T);
 }
 
 /**
@@ -68,7 +68,7 @@ double Option::d2() const {
 double Option::normal_cdf(double x) const {
     // Using the complementary error function for better accuracy
     // N(x) = 0.5 * [1 + erf(x/sqrt(2))]
-    return 0.5 * erfc(-x * M_SQRT1_2);
+    	return 0.5 * erfc(-x * M_SQRT1_2);
 }
 
 /**
@@ -76,7 +76,7 @@ double Option::normal_cdf(double x) const {
  * N'(x) = (1/sqrt(2π)) * e^(-x²/2)
  */
 double Option::normal_pdf(double x) const {
-    return exp(-0.5 * x * x) / SQRT_2PI;
+    	return exp(-0.5 * x * x) / SQRT_2PI;
 }
 
 /**
@@ -84,13 +84,13 @@ double Option::normal_pdf(double x) const {
  * C = S*N(d1) - K*e^(-rT)*N(d2)
  */
 double Option::calculate_call_price() const {
-    double d1_val = d1();
-    double d2_val = d2();
+    	double d1_val = d1();
+    	double d2_val = d2();
     
-    double term1 = S * normal_cdf(d1_val);
-    double term2 = K * exp(-r * T) * normal_cdf(d2_val);
+    	double term1 = S * normal_cdf(d1_val);
+    	double term2 = K * exp(-r * T) * normal_cdf(d2_val);
     
-    return term1 - term2;
+    	return term1 - term2;
 }
 
 /**
@@ -98,13 +98,13 @@ double Option::calculate_call_price() const {
  * P = K*e^(-rT)*N(-d2) - S*N(-d1)
  */
 double Option::calculate_put_price() const {
-    double d1_val = d1();
-    double d2_val = d2();
+	double d1_val = d1();
+    	double d2_val = d2();
     
-    double term1 = K * exp(-r * T) * normal_cdf(-d2_val);
-    double term2 = S * normal_cdf(-d1_val);
+    	double term1 = K * exp(-r * T) * normal_cdf(-d2_val);
+    	double term2 = S * normal_cdf(-d1_val);
     
-    return term1 - term2;
+    	return term1 - term2;
 }
 
 /**
@@ -113,7 +113,7 @@ double Option::calculate_put_price() const {
  * Delta_call = N(d1)
  */
 double Option::calculate_delta_call() const {
-    return normal_cdf(d1());
+    	return normal_cdf(d1());
 }
 
 /**
@@ -122,7 +122,7 @@ double Option::calculate_delta_call() const {
  * Delta_put = N(d1) - 1
  */
 double Option::calculate_delta_put() const {
-    return normal_cdf(d1()) - 1.0;
+    	return normal_cdf(d1()) - 1.0;
 }
 
 /**
@@ -131,8 +131,8 @@ double Option::calculate_delta_put() const {
  * Gamma = N'(d1) / (S * sigma * sqrt(T))
  */
 double Option::calculate_gamma() const {
-    double d1_val = d1();
-    return normal_pdf(d1_val) / (S * sigma * sqrt(T));
+    	double d1_val = d1();
+    	return normal_pdf(d1_val) / (S * sigma * sqrt(T));
 }
 
 /**
@@ -141,13 +141,13 @@ double Option::calculate_gamma() const {
  * Theta is typically negative (time decay)
  */
 double Option::calculate_theta_call() const {
-    double d1_val = d1();
-    double d2_val = d2();
+    	double d1_val = d1();
+    	double d2_val = d2();
     
-    double term1 = -(S * normal_pdf(d1_val) * sigma) / (2.0 * sqrt(T));
-    double term2 = r * K * exp(-r * T) * normal_cdf(d2_val);
+    	double term1 = -(S * normal_pdf(d1_val) * sigma) / (2.0 * sqrt(T));
+    	double term2 = r * K * exp(-r * T) * normal_cdf(d2_val);
     
-    return term1 - term2;
+    	return term1 - term2;
 }
 
 /**
@@ -155,13 +155,13 @@ double Option::calculate_theta_call() const {
  * Measures sensitivity of put price to passage of time
  */
 double Option::calculate_theta_put() const {
-    double d1_val = d1();
-    double d2_val = d2();
+    	double d1_val = d1();
+    	double d2_val = d2();
     
-    double term1 = -(S * normal_pdf(d1_val) * sigma) / (2.0 * sqrt(T));
-    double term2 = r * K * exp(-r * T) * normal_cdf(-d2_val);
+    	double term1 = -(S * normal_pdf(d1_val) * sigma) / (2.0 * sqrt(T));
+   	double term2 = r * K * exp(-r * T) * normal_cdf(-d2_val);
     
-    return term1 + term2;
+    	return term1 + term2;
 }
 
 /**
@@ -170,8 +170,8 @@ double Option::calculate_theta_put() const {
  * Vega = S * sqrt(T) * N'(d1)
  */
 double Option::calculate_vega() const {
-    double d1_val = d1();
-    return S * sqrt(T) * normal_pdf(d1_val);
+    	double d1_val = d1();
+    	return S * sqrt(T) * normal_pdf(d1_val);
 }
 
 /**
@@ -180,8 +180,8 @@ double Option::calculate_vega() const {
  * Rho_call = K * T * e^(-rT) * N(d2)
  */
 double Option::calculate_rho_call() const {
-    double d2_val = d2();
-    return K * T * exp(-r * T) * normal_cdf(d2_val);
+    	double d2_val = d2();
+   	return K * T * exp(-r * T) * normal_cdf(d2_val);
 }
 
 /**
@@ -190,6 +190,6 @@ double Option::calculate_rho_call() const {
  * Rho_put = -K * T * e^(-rT) * N(-d2)
  */
 double Option::calculate_rho_put() const {
-    double d2_val = d2();
-    return -K * T * exp(-r * T) * normal_cdf(-d2_val);
+    	double d2_val = d2();
+    	return -K * T * exp(-r * T) * normal_cdf(-d2_val);
 }
