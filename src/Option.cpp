@@ -5,6 +5,7 @@
 // Mathematical constants
 const double PI = 3.14159265358979323846;
 const double SQRT_2PI = 2.506628274631000502;
+const double M_SQRT1_2 = 0.7071067811865476;
 
 /**
  * Constructor: Initializes option with given parameters
@@ -144,7 +145,7 @@ double Option::calculate_theta_call() const {
     double d2_val = d2();
     
     double term1 = -(S * normal_pdf(d1_val) * sigma) / (2.0 * sqrt(T));
-    double term2 = -r * K * exp(-r * T) * normal_cdf(d2_val);
+    double term2 = r * K * exp(-r * T) * normal_cdf(d2_val);
     
     return term1 - term2;
 }
