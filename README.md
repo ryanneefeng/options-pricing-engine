@@ -64,7 +64,7 @@ The "Greeks" measure the sensitivity of option prices to various parameters:
 
 *Note: N'(x) = (1/√2π)e^(-x²/2) is the standard normal probability density function*
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
