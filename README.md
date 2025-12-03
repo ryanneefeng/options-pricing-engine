@@ -65,27 +65,26 @@ N(x) = Standard normal cumulative distribution function
 *Note: N'(x) = (1/√2π)e^(-x²/2) is the standard normal probability density function*
 
 Ex.
- Call:
-   Delta = 0.5422
-     Delta is basically 0.54, so the call behaves like owning 54 shares for every 100 options. Higher Delta means option is "stock-like". If Delta was closer to 1.0 then you'd basically just have the stock.
-   Gamma = 0.0198
-     Higher Gamma means your Delta hedge will become unstable faster. If Gamma was much higher you'd have to rebalance your hedge A LOT (Gamma scalping).
-   Theta = -6.2771
-     Basically, the option loses around $6.28 in value per day. Negative means it is losing value (obviously). If Theta was small in magnitude, teh option wouldn't change much as time goes on.
-   Vega = 39.705
-    With every +1% in volatility, the option price goes up around $0.40 (cus 39.7 rounds to 40). If it were real big, the options value would be sensitve to valirity shifts.
-  Pull:
-   Delta = -0.4578
-     Delta is roughly -0.46, which means the put behaves like being *short* 46 shares for every 100 options. Since Delta is closer to 0 than -1, the option isn’t super sensitive to small price movements.
-     If Delta were closer to -1.0, you'd basically be holding the OPPOSITE of the stock.
-   Gamma = 0.0198
-    This value is pretty small, meaning your Delta hedge won’t swing around too violently. If Gamma were way higher, you’d have to rebalance constantly.
-   Theta = -1.2832
-    The option loses about $1.28 in value per day due to time decay.
-   Vega = 39.6705
-    With every +1% change in volatility, the put price moves about $0.40.
-   Rho = -53.6776
-    Interest rates rising by 1% drops the put’s value by about $0.54.Negative Rho is normal for puts.
+ -Call:
+   -Delta = 0.5422
+     -Delta is basically 0.54, so the call behaves like owning 54 shares for every 100 options. Higher Delta means option is "stock-like". If Delta was closer to 1.0 then you'd basically just have the stock.
+   -Gamma = 0.0198
+     -Higher Gamma means your Delta hedge will become unstable faster. If Gamma was much higher you'd have to rebalance your hedge A LOT (Gamma scalping).
+   -Theta = -6.2771
+     -Basically, the option loses around $6.28 in value per day. Negative means it is losing value (obviously). If Theta was small in magnitude, teh option wouldn't change much as time goes on.
+   -Vega = 39.705
+     -With every +1% in volatility, the option price goes up around $0.40 (cus 39.7 rounds to 40). If it were real big, the options value would be sensitve to valirity shifts.
+  -Pull:
+   -Delta = -0.4578
+     -Delta is roughly -0.46, which means the put behaves like being *short* 46 shares for every 100 options. Since Delta is closer to 0 than -1, the option isn’t super sensitive to small price movements. If Delta were closer to -1.0, you'd basically be holding the OPPOSITE of the stock.
+   -Gamma = 0.0198
+     -This value is pretty small, meaning your Delta hedge won’t swing around too violently. If Gamma were way higher, you’d have to rebalance constantly.
+   -Theta = -1.2832
+     -The option loses about $1.28 in value per day due to time decay.
+   -Vega = 39.6705
+     -With every +1% change in volatility, the put price moves about $0.40.
+   -Rho = -53.6776
+     -Interest rates rising by 1% drops the put’s value by about $0.54.Negative Rho is normal for puts.
   
 ### Installation
 
