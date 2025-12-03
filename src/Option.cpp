@@ -25,23 +25,29 @@ Option::Option(double stock_price, double strike_price, double time_to_maturity,
  */
 bool Option::validate_inputs() const {
 	if (S <= 0) {
-       		throw std::invalid_argument("Stock price must be positive");
+       		throw std::invalid_argument("Stock price must be a positive number");
+		return 0;	
     	}
     	if (K <= 0) {
-        	throw std::invalid_argument("Strike price must be positive");
-    	}
+        	throw std::invalid_argument("Strike price must be a positive number");
+    		return 0;
+	}
     	if (T < 0) {
-        	throw std::invalid_argument("Time to maturity cannot be negative");
-    	}
+        	throw std::invalid_argument("Time to maturity must be a positive number");
+		return 0;
+   	}
    	if (T == 0) {
         	throw std::invalid_argument("Time to maturity cannot be zero (option expired)");
+		return 0;
     	}
     	if (sigma < 0) {
-        	throw std::invalid_argument("Volatility cannot be negative");
-    	}
+        	throw std::invalid_argument("Volatility must be a positive number");
+    		return 0;
+	}
     	if (sigma == 0) {
         	throw std::invalid_argument("Volatility cannot be zero");
-    	}
+    		return 0;
+	}
     	return true;
 }
 
