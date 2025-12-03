@@ -193,3 +193,17 @@ double Option::calculate_rho_put() const {
     	double d2_val = d2();
     	return -K * T * exp(-r * T) * normal_cdf(-d2_val);
 }
+
+/**
+ * Verify put-call parity relationship
+ * Should hold: C - P = S - K*e^(-rT)
+ * Returns the parity difference
+*/
+double Option::verify_put_call_parity() const {
+	double call = calculate_call_price();
+	double put = calculate_put_price();
+	double parity_lhs = call-put;
+	double parity_rhs = S-K * exp(-r * T);
+	return parity_lhs - parity_rhs;
+}
+

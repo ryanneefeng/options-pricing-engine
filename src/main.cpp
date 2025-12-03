@@ -68,8 +68,8 @@ int main() {
         	cout << endl;
         
        		// Display Put Option Results
-        	cout << "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" << endl;
-        	cout << "                 PUT OPTION" << endl;
+        	cout << "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" << endl;        	
+		cout << "                 PUT OPTION" << endl;
         	cout << "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" << endl;
         	cout << "Price:  $" << option.calculate_put_price() << endl;
         	cout << "Delta:   " << option.calculate_delta_put() << endl;
@@ -78,11 +78,26 @@ int main() {
         	cout << "Vega:    " << option.calculate_vega() << endl;
         	cout << "Rho:     " << option.calculate_rho_put() << endl;
         	cout << endl;
+
+        	cout << "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" << endl;
+        	cout << "                     VALIDATION                      " << endl;
+        	cout << "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" << endl;
+        	double parity_error = option.verify_put_call_parity();
+        	cout << "Put-Call Parity Error: " << scientific << setprecision(2) << parity_error << endl;
+        	if (abs(parity_error) < 0.0001) {
+                 	cout << "✓ Calculations verified!" << endl;
+        	}
+        	else {
+                	cout << "⚠ Warning: Large parity error detected" << endl;
+        	}
+        	cout << "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" << endl;
+
+
         
     	} catch (const exception& e) {
         	cerr << "Error: " << e.what() << endl;
         	return 1;
     	}
-    
+	
     	return 0;
 }
