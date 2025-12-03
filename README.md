@@ -115,22 +115,22 @@ Calculating...
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
                  CALL OPTION
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Price:  $8.0216
-Delta:   0.4602
-Gamma:   0.0188
-Theta:  -6.4140
-Vega:   37.5247
-Rho:    38.0945
+Price:  $8.0214
+Delta:   0.5422
+Gamma:   0.0198
+Theta:  -6.2771
+Vega:   39.6705
+Rho:    46.2015
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
                  PUT OPTION
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Price:  $7.9697
-Delta:  -0.5398
-Gamma:   0.0188
-Theta:  -1.2889
-Vega:   37.5247
-Rho:   -41.8144
+Price:  $7.9004
+Delta:  -0.4578
+Gamma:   0.0198
+Theta:  -1.2832
+Vega:   39.6705
+Rho:   -53.6776
 ```
 
 ### Programmatic Usage
@@ -256,7 +256,7 @@ Planned features for future versions:
 - [ ] **Unit Tests**: Comprehensive test suite with Google Test
 - [ ] **Benchmarking**: Performance comparison suite
 
-## 📚 Resources & References
+## Resources & References
 
 **Academic Papers:**
 - Black, F., & Scholes, M. (1973). "The Pricing of Options and Corporate Liabilities." *Journal of Political Economy*, 81(3), 637-654.
