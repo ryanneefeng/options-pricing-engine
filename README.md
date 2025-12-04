@@ -4,7 +4,7 @@
 [![C++](https://img.shields.io/badge/C++-17-blue.svg)](https://isocpp.org/)
 [![Status](https://img.shields.io/badge/Status-Active-success.svg)]()
 
-A high-performance C++ implementation of the Black-Scholes-Merton model for pricing European options with complete Greeks calculations.
+A high-performance C++ implementation of the Black-Scholes-Merton model for pricing European options with complete Greeks calculations made by a student who realized they wanted to get into quant and CS way too late.
 
 ## Features
 
@@ -52,7 +52,7 @@ N(x) = Standard normal cumulative distribution function
 
 ### Greeks
 
-The "Greeks" measure the sensitivity of option prices to various parameters:
+"Greeks" measure the sensitivity of option prices to various parameters. Basically they tell us and other people whether an option is worth buying, selling, or keeping:
 
 | Greek | Measures | Call Formula | Put Formula |
 |-------|----------|--------------|-------------|
@@ -63,13 +63,6 @@ The "Greeks" measure the sensitivity of option prices to various parameters:
 | **Rho (ρ)** | Rate of change w.r.t. interest rate | KTe^(-rT)N(d₂) | -KTe^(-rT)N(-d₂) |
 
 *Note: N'(x) = (1/√2π)e^(-x²/2) is the standard normal probability density function*
-
-## 🚀 Quick Start
-
-### Prerequisites
-
-- C++ compiler with C++17 support (g++ 7.0+, clang 5.0+, or MSVC 2017+)
-- Standard C++ libraries
 
 ### Installation
 
@@ -82,24 +75,8 @@ cd options-pricing-engine
 g++ -std=c++17 src/main.cpp src/Option.cpp -o bin/pricer -I include
 
 # Run the program
-./bin/pricer
+./pricer
 ```
-
-### Alternative: Using Make
-
-```bash
-make
-./bin/pricer
-```
-
-## Usage
-
-### Interactive Mode
-
-```bash
-./bin/pricer
-```
-
 **Example Session:**
 ```
 === Black-Scholes Options Pricing Engine v1.0 ===
@@ -115,22 +92,22 @@ Calculating...
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
                  CALL OPTION
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Price:  $8.0216
-Delta:   0.4602
-Gamma:   0.0188
-Theta:  -6.4140
-Vega:   37.5247
-Rho:    38.0945
+Price:  $8.0214
+Delta:   0.5422
+Gamma:   0.0198
+Theta:  -6.2771
+Vega:   39.6705
+Rho:    46.2015
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
                  PUT OPTION
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Price:  $7.9697
-Delta:  -0.5398
-Gamma:   0.0188
-Theta:  -1.2889
-Vega:   37.5247
-Rho:   -41.8144
+Price:  $7.9004
+Delta:  -0.4578
+Gamma:   0.0198
+Theta:  -1.2832
+Vega:   39.6705
+Rho:   -53.6776
 ```
 
 ### Programmatic Usage
@@ -177,23 +154,6 @@ options-pricing-engine/
 ├── Makefile
 └── README.md
 ```
-
-## Validation & Testing
-
-The implementation has been validated against known theoretical values:
-
-| Test Case | Parameter Set | Expected Call Price | Actual Output | Error |
-|-----------|---------------|---------------------|---------------|-------|
-| ATM Option | S=100, K=100, T=1, r=0.05, σ=0.2 | $10.4506 | $10.4506 | 0.00% |
-| ITM Option | S=110, K=100, T=1, r=0.05, σ=0.2 | $16.7248 | $16.7248 | 0.00% |
-| OTM Option | S=90, K=100, T=1, r=0.05, σ=0.2 | $5.5733 | $5.5733 | 0.00% |
-
-**Test with your own values:**
-```bash
-# Run validation suite (coming soon)
-./bin/test_suite
-```
-
 ## Educational Value
 
 This project demonstrates:
@@ -256,16 +216,11 @@ Planned features for future versions:
 - [ ] **Unit Tests**: Comprehensive test suite with Google Test
 - [ ] **Benchmarking**: Performance comparison suite
 
-## 📚 Resources & References
+## Resources & References
 
 **Academic Papers:**
 - Black, F., & Scholes, M. (1973). "The Pricing of Options and Corporate Liabilities." *Journal of Political Economy*, 81(3), 637-654.
 - Merton, R. C. (1973). "Theory of Rational Option Pricing." *Bell Journal of Economics and Management Science*, 4(1), 141-183.
-
-**Textbooks:**
-- Hull, J. C. (2017). *Options, Futures, and Other Derivatives* (10th ed.). Pearson.
-- Wilmott, P. (2006). *Paul Wilmott on Quantitative Finance* (2nd ed.). Wiley.
-- Shreve, S. E. (2004). *Stochastic Calculus for Finance II: Continuous-Time Models*. Springer.
 
 **Online Resources:**
 - [MIT OpenCourseWare - Mathematical Methods for Quantitative Finance](https://ocw.mit.edu/courses/mathematics/)
