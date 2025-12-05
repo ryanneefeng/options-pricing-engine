@@ -93,35 +93,111 @@ g++ -std=c++17 src/main.cpp src/Option.cpp -o bin/pricer -I include
 ```
 **Example Session:**
 ```
-=== Black-Scholes Options Pricing Engine v1.0 ===
+======================================================
+    Black-Scholes Options Pricing Engine v1.0
+======================================================
 
-Enter Stock Price (S): 100
-Enter Strike Price (K): 105
+How many options would you like to run?
+2
+Enter Stock Price (S): $100
+Enter Strike Price (K): $105
 Enter Time to Maturity (T) in years: 1.0
-Enter Risk-free Rate (r) as decimal: 0.05
-Enter Volatility (σ) as decimal: 0.20
+Enter Risk-free Rate (r) as decimal (e.g., 0.05 for 5%): 0.05
+Enter Volatility (sigma) as decimal (e.g., 0.20 for 20%): 0.20
 
 Calculating...
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+======================================================
                  CALL OPTION
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+======================================================
 Price:  $8.0214
 Delta:   0.5422
 Gamma:   0.0198
-Theta:  -6.2771
-Vega:   39.6705
-Rho:    46.2015
+Theta:   -6.2771
+Vega:    39.6705
+Rho:     46.2015
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+======================================================
                  PUT OPTION
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+======================================================
 Price:  $7.9004
-Delta:  -0.4578
+Delta:   -0.4578
 Gamma:   0.0198
-Theta:  -1.2832
-Vega:   39.6705
-Rho:   -53.6776
+Theta:   -1.2832
+Vega:    39.6705
+Rho:     -53.6776
+
+======================================================
+                     VALIDATION
+======================================================
+Put-Call Parity Error: 7.11e-15
+Calculations verified!
+======================================================
+                    CALL ANALYSIS
+======================================================
+Delta: Good value. Reacts strongly to price changes and good for directional trades.
+Gamma: Healthy value as the Delta will move noticeably. Good for trading and Gamma scalping.
+Theta: Heavy time decay: Good for shorting, risky for long-term.
+Vega: Medium sensitivity. Good if you expect rising uncertainty.
+Rho: Big rate sensitivity. Long-term options/high strike.
+======================================================
+                    PUT ANALYSIS
+======================================================
+Delta: Moderately bearish. Balanced downside protection.
+Gamma: Healthy value as the Delta will move noticeably. Good for trading and Gamma scalping.
+Theta: Moderate time decay. Should only hold if you expect a move soon.
+Vega: Medium sensitivity. Good if you expect rising uncertainty.
+Rho: Big rate sensitivity. Long-term options/high strike.
+
+Enter Stock Price (S): $50
+Enter Strike Price (K): $60
+Enter Time to Maturity (T) in years: 4
+Enter Risk-free Rate (r) as decimal (e.g., 0.05 for 5%): 0.03
+Enter Volatility (sigma) as decimal (e.g., 0.20 for 20%): 0.10
+
+Calculating...
+
+======================================================
+                 CALL OPTION
+======================================================
+Price:  $2.7005
+Delta:   0.4162
+Gamma:   0.0390
+Theta:   -1.0309
+Vega:    39.0110
+Rho:     72.4394
+
+======================================================
+                 PUT OPTION
+======================================================
+Price:  $5.9157
+Delta:   -0.5838
+Gamma:   0.0390
+Theta:   0.5655
+Vega:    39.0110
+Rho:     -140.4215
+
+======================================================
+                     VALIDATION
+======================================================
+Put-Call Parity Error: -3.55e-15
+Calculations verified!
+======================================================
+                    CALL ANALYSIS
+======================================================
+Delta: This option will move a bit with the stock, but still not something you would hedge with (more speculative than strategic).
+Gamma: High Gamma. Dangerous if hedging, but great for long options and are aiming for volatility pops.
+Theta: Mild time decay, good for holding long-term.
+Vega: Medium sensitivity. Good if you expect rising uncertainty.
+Rho: Big rate sensitivity. Long-term options/high strike.
+======================================================
+                    PUT ANALYSIS
+======================================================
+Delta: Moderately bearish. Balanced downside protection.
+Gamma: High Gamma. Dangerous if hedging, but great for long options and are aiming for volatility pops.
+Theta: Very slow decay. Cheap to hold.
+Vega: Medium sensitivity. Good if you expect rising uncertainty.
+Rho: Big rate sensitivity. Long-term options/high strike.
 ```
 
 ### Programmatic Usage
