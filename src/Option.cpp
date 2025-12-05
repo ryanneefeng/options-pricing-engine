@@ -14,7 +14,7 @@ Option::Option(double stock_price, double strike_price, double time_to_maturity,
                double risk_free_rate, double volatility)
     	: S(stock_price), K(strike_price), T(time_to_maturity),
       	r(risk_free_rate), sigma(volatility) {
-    
+
     if (!validate_inputs()) {
 	throw std::invalid_argument("Invalid option parameters");
     }
@@ -26,7 +26,7 @@ Option::Option(double stock_price, double strike_price, double time_to_maturity,
 bool Option::validate_inputs() const {
 	if (S <= 0) {
        		throw std::invalid_argument("Stock price must be a positive number");
-		return 0;	
+		return 0;
     	}
     	if (K <= 0) {
         	throw std::invalid_argument("Strike price must be a positive number");
