@@ -21,8 +21,8 @@ double get_positive_input(const string& prompt){
 }
 
 int main() {
-	cout << "======================================================" << endl;
-	cout << "    Black-Scholes Options Pricing Engine v1.0" << endl;
+		cout << "======================================================" << endl;
+		cout << "    Black-Scholes Options Pricing Engine v1.0" << endl;
     	cout << "======================================================" << endl;
     	cout << endl;
 
@@ -75,7 +75,7 @@ int main() {
 
        			// Display Put Option Results
         		cout << "======================================================" << endl;
-			cout << "                 PUT OPTION" << endl;
+				cout << "                     PUT OPTION" << endl;
         		cout << "======================================================" << endl;
         		cout << "Price:  $" << option.calculate_put_price() << endl;
         		cout << "Delta:   " << option.calculate_delta_put() << endl;
@@ -97,7 +97,7 @@ int main() {
                 		cout << "Warning: Large parity error detected" << endl;
         		}
 
-        		cout << "======================================================" << endl;
+        	cout << "======================================================" << endl;
 			cout << "                    CALL ANALYSIS                       " << endl;
 			cout << "======================================================" << endl;
 
@@ -163,10 +163,10 @@ int main() {
 			}
 
 			cout << "======================================================" << endl;
-                        cout << "                    PUT ANALYSIS                       " << endl;
-                        cout << "======================================================" << endl;
-
-                        // Delta Analysis
+            cout << "                    PUT ANALYSIS                       " << endl;
+            cout << "======================================================" << endl;
+			
+			// Delta Analysis
 			if (option.calculate_delta_put() > -0.25){
 	    		cout << "Delta: Weak bearish exposure. Barely moves with the stock." << endl;
 			}
