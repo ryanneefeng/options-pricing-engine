@@ -15,7 +15,7 @@ double get_positive_input(const string& prompt){
 		else {
 			cout << "Error: Please enter a positive number.\n";
 			cin.clear();
-			cin.ignore(numeric_limits<streamsize>::max(), 'n');
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		}
 	}
 }
@@ -101,115 +101,125 @@ int main() {
 			cout << "                    CALL ANALYSIS                       " << endl;
 			cout << "======================================================" << endl;
 
+			// Delta Analysis
 			if (option.calculate_delta_call() <= 0.25){
-			cout << "Delta: Delta is pretty low, so the price movement won't help much. Basically, don't expect it to move unless something dramatic happens." << endl;
+    			cout << "Delta: Delta is pretty low, so the price movement won't help much. Basically, don't expect it to move unless something dramatic happens." << endl;
 			}
-			else if (option.calculate_delta_call() <= 0.50 && option.calculate_delta_call() > 0.25){
-			cout << "Delta: This option will move a bit with the stock, but still not something you would hedge with (more speculative than strategic." << endl;
+			else if (option.calculate_delta_call() > 0.25 && option.calculate_delta_call() <= 0.50){
+    			cout << "Delta: This option will move a bit with the stock, but still not something you would hedge with (more speculative than strategic)." << endl;
 			}
-			else if (option.calculate_delta_call() <= 0.70 && option.calculate_delta_call() > 0.50){
-                        cout << "Delta: Good value. Reacts strongly to price changes and good for directional trades" << endl;
-                        }
-			else if (option.calculate_delta_call() <= 0.90 && option.calculate_delta_call() > 0.70){
-                        cout << "Delta: Good for leveraging with a lower upfront cost. Not cheap, but strong." << endl;
-                        }
-			else if (option.calculate_delta_call() <= 1.00 && option.calculate_delta_call() > 0.90){ 
-			cout << "Delta: You're basically holding the stock. Not much optionality." << endl;
+			else if (option.calculate_delta_call() > 0.50 && option.calculate_delta_call() <= 0.70){
+    			cout << "Delta: Good value. Reacts strongly to price changes and good for directional trades." << endl;
+			}
+			else if (option.calculate_delta_call() > 0.70 && option.calculate_delta_call() <= 0.90){
+   	 		cout << "Delta: Good for leveraging with a lower upfront cost. Not cheap, but strong." << endl;
+			}
+			else if (option.calculate_delta_call() > 0.90 && option.calculate_delta_call() <= 1.00){ 
+    			cout << "Delta: You're basically holding the stock. Not much optionality." << endl;
 			}
 
+			// Gamma Analysis
 			if (option.calculate_gamma() < 0.01){
-                        cout << "Gamma: Very stable, wont need rebalancing and not much convexity" << endl;
-                        }
-                        else if (option.calculate_gamma() < 0.03 && option.calculate_gamma() >=0.01){
-                        cout << "Gamma: Healthy value as the Delta will move noticeably. Good for trading and Gamma scalping" << endl;
-                        }
-                        else if (option.calculate_delta_call() >= 0.03){
-                        cout << "Gamma: High Gamma. Dangerous if hedging, but great for long options and are aiming for volatility pops." << endl;
-                        }
+    			cout << "Gamma: Very stable, won't need rebalancing and not much convexity." << endl;
+			}
+			else if (option.calculate_gamma() >= 0.01 && option.calculate_gamma() < 0.03){
+    			cout << "Gamma: Healthy value as the Delta will move noticeably. Good for trading and Gamma scalping." << endl;
+			}
+			else if (option.calculate_gamma() >= 0.03){
+    			cout << "Gamma: High Gamma. Dangerous if hedging, but great for long options and are aiming for volatility pops." << endl;
+			}
 
+			// Theta Analysis
 			if (option.calculate_theta_call() > -2){
-                        cout << "Theta: Mild time decay, good for holding long-term" << endl;
-                        }
-                        else if (option.calculate_theta_call() >= -6 && option.calculate_theta_call() <= -2){
-                        cout << "Theta: Moderate time decay. Should only hold if you expect a move soon." << endl;
-                        }
-                        else if (option.calculate_theta_call() < -6){
-                        cout << "Theta: Heavy time decay: Good for shorting, risky for long-term" << endl;
-                        }
+    			cout << "Theta: Mild time decay, good for holding long-term." << endl;
+			}
+			else if (option.calculate_theta_call() >= -6 && option.calculate_theta_call() <= -2){
+    			cout << "Theta: Moderate time decay. Should only hold if you expect a move soon." << endl;
+			}
+			else if (option.calculate_theta_call() < -6){
+    			cout << "Theta: Heavy time decay: Good for shorting, risky for long-term." << endl;
+			}
 
+			// Vega Analysis
 			if (option.calculate_vega() < 20){
-                        cout << "Vega: Low volatility sensitivty. IV shifts won't affect price much" << endl;
-                        }
-                        else if (option.calculate_vega() >= 20 && option.calculate_gamma() < 50){
-                        cout << "Vega: Medium sensitivity. Good if you expect rising uncertainty" << endl;
-                        }
-                        else if (option.calculate_vega() >= 50){
-                        cout << "Vega: High sensitivity. High profits, high risk" << endl;
-                        }
+    			cout << "Vega: Low volatility sensitivity. IV shifts won't affect price much." << endl;
+			}
+			else if (option.calculate_vega() >= 20 && option.calculate_vega() < 50){
+    			cout << "Vega: Medium sensitivity. Good if you expect rising uncertainty." << endl;
+			}
+			else if (option.calculate_vega() >= 50){
+    			cout << "Vega: High sensitivity. High profits, high risk." << endl;
+			}
 
+			// Rho Analysis
 			if (option.calculate_rho_call() < 10){
-                        cout << "Rho: Rate changes barely matter" << endl;
-                        }
-                        else if (option.calculate_rho_call() >= 10 && option.calculate_gamma() < 40){
-                        cout << "Rho: Moderate rate exposure" << endl;
-                        }
-                        else if (option.calculate_rho_call() >= 40){
-                        cout << "Rho: Big rate sensitivity. Long-term options/high strike" << endl;
-                        }
+    			cout << "Rho: Rate changes barely matter." << endl;
+			}
+			else if (option.calculate_rho_call() >= 10 && option.calculate_rho_call() < 40){
+    			cout << "Rho: Moderate rate exposure." << endl;
+			}
+			else if (option.calculate_rho_call() >= 40){
+    			cout << "Rho: Big rate sensitivity. Long-term options/high strike." << endl;
+			}
 
 			cout << "======================================================" << endl;
                         cout << "                    PUT ANALYSIS                       " << endl;
                         cout << "======================================================" << endl;
 
-                        if (option.calculate_delta_put() > -0.25){
-                        cout << "Delta: Weak bearishe exposure. Barely moves with the stock." << endl;
-                        }
-                        else if (option.calculate_delta_put() > -0.65 && option.calculate_delta_put() <= -0.25){
-                        cout << "Delta: Moderately bearish. Balanced downside protection." << endl;
-                        }
-                        else if (option.calculate_delta_put() <= -0.65){
-                        cout << "Delta: Strong bearish. Behaves almost like a short stock." << endl;
-                        }
-
-                        if (option.calculate_gamma() < 0.01){
-                        cout << "Gamma: Very stable, wont need rebalancing and not much convexity" << endl;
-                        }
-                        else if (option.calculate_gamma() < 0.03 && option.calculate_gamma() >=0.01){
-                        cout << "Gamma: Healthy value as the Delta will move noticeably. Good for trading and Gamma scalping" << endl;
-                        }
-                        else if (option.calculate_delta_put() >= 0.03){
-                        cout << "Gamma: High Gamma. Dangerous if hedging, but great for long options and are aiming for volatility pops." << endl;
-                        }
-
-                        if (option.calculate_theta_put() > -1){
-                        cout << "Theta: Very slow decay. Cheap to hold" << endl;
-                        }
-                        else if (option.calculate_theta_put() >= -3 && option.calculate_theta_put() <= -1){
-                        cout << "Theta: Moderate time decay. Should only hold if you expect a move soon." << endl;
-                        }
-                        else if (option.calculate_theta_put() < -3){
-                        cout << "Theta: Heavy time decay. Good for shorting, risky for long-term" << endl;
-                        }
-
-                        if (option.calculate_vega() < 20){
-                        cout << "Vega: Low volatility sensitivty. IV shifts won't affect price much" << endl;
-                        }
-                        else if (option.calculate_vega() >= 20 && option.calculate_gamma() < 50){
-                        cout << "Vega: Medium sensitivity. Good if you expect rising uncertainty" << endl;
-                        }
-                        else if (option.calculate_vega() >= 50){
-                        cout << "Vega: High sensitivity. High profits, high risk" << endl;
+                        // Delta Analysis
+			if (option.calculate_delta_put() > -0.25){
+	    		cout << "Delta: Weak bearish exposure. Barely moves with the stock." << endl;
+			}
+			else if (option.calculate_delta_put() <= -0.25 && option.calculate_delta_put() > -0.65){
+		    	cout << "Delta: Moderately bearish. Balanced downside protection." << endl;
+			}
+			else if (option.calculate_delta_put() <= -0.65){
+		    	cout << "Delta: Strong bearish. Behaves almost like a short stock." << endl;
 			}
 
+			// Gamma Analysis (same for call and put)
+			if (option.calculate_gamma() < 0.01){
+    			cout << "Gamma: Very stable, won't need rebalancing and not much convexity." << endl;
+			}
+			else if (option.calculate_gamma() >= 0.01 && option.calculate_gamma() < 0.03){
+		    	cout << "Gamma: Healthy value as the Delta will move noticeably. Good for trading and Gamma scalping." << endl;
+			}
+			else if (option.calculate_gamma() >= 0.03){
+		    	cout << "Gamma: High Gamma. Dangerous if hedging, but great for long options and are aiming for volatility pops." << endl;
+			}
+
+			// Theta Analysis
+			if (option.calculate_theta_put() > -1){
+    			cout << "Theta: Very slow decay. Cheap to hold." << endl;
+			}
+			else if (option.calculate_theta_put() >= -3 && option.calculate_theta_put() <= -1){
+    			cout << "Theta: Moderate time decay. Should only hold if you expect a move soon." << endl;
+			}
+			else if (option.calculate_theta_put() < -3){
+   		 	cout << "Theta: Heavy time decay. Good for shorting, risky for long-term." << endl;
+			}
+
+			// Vega Analysis (same for call and put)
+			if (option.calculate_vega() < 20){
+    			cout << "Vega: Low volatility sensitivity. IV shifts won't affect price much." << endl;
+			}
+			else if (option.calculate_vega() >= 20 && option.calculate_vega() < 50){
+    			cout << "Vega: Medium sensitivity. Good if you expect rising uncertainty." << endl;
+			}
+			else if (option.calculate_vega() >= 50){
+    			cout << "Vega: High sensitivity. High profits, high risk." << endl;
+			}
+
+			// Rho Analysis
 			if (option.calculate_rho_put() > -10){
-                        cout << "Rho: Rate changes barely matter" << endl;
-                        }
-                        else if (option.calculate_rho_put() >= -40 && option.calculate_gamma() <= -10){
-                        cout << "Rho: Moderate rate exposure" << endl;
-                        }
-                        else if (option.calculate_rho_put() < -40){
-                        cout << "Rho: Big rate sensitivity. Long-term options/high strike" << endl;
-                        }
+    			cout << "Rho: Rate changes barely matter." << endl;
+			}
+			else if (option.calculate_rho_put() <= -10 && option.calculate_rho_put() > -40){
+    			cout << "Rho: Moderate rate exposure." << endl;
+			}
+			else if (option.calculate_rho_put() <= -40){
+    			cout << "Rho: Big rate sensitivity. Long-term options/high strike." << endl;
+			}
 
 		}
 		catch (const exception& e) {

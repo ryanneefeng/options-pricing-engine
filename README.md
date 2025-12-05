@@ -8,12 +8,26 @@ A high-performance C++ implementation of the Black-Scholes-Merton model for pric
 
 ## Features
 
-- **European Options Pricing**: Call and Put options using closed-form Black-Scholes formula
-- **Complete Greeks Suite**: Delta, Gamma, Theta, Vega, and Rho calculations
-- **Input Validation**: Robust error handling for invalid parameters
-- **High Performance**: Optimized O(1) calculations
-- **Clean Architecture**: Object-oriented design with clear separation of concerns
-- **Well-Documented**: Comprehensive inline comments and technical documentation
+- European Options Pricing
+- Complete Greeks Suite (Delta, Gamma, Theta, Vega, Rho)
+- Input Validation
+- Clean Architecture
+- Put-call party verification
+- Multi-option batch processing
+- Automated Greek analysis and interpretation
+- Professional user interface
+
+**Documentation:**
+- Comprehensive README with mathematical background
+- Inline code documentation
+- technical writeup (in progress - 60% complete)
+
+**Planned Enhancements:**
+- Implied volatility calculator (Newton-Raphson method)
+- American options pricing (binomial tree)
+- Dividend-paying stocks support
+- Historical volatility calculator
+- Interactive mode with saved sessions
 
 ## Mathematical Background
 
