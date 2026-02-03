@@ -4,23 +4,27 @@
 [![C++](https://img.shields.io/badge/C++-17-blue.svg)](https://isocpp.org/)
 [![Status](https://img.shields.io/badge/Status-Active-success.svg)]()
 
-A high-performance C++ implementation of the Black-Scholes-Merton model for pricing European options with complete Greeks calculations made by a student who realized they wanted to get into quant and CS way too late.
+A high-performance C++ implementation of the Black-Scholes-Merton model for pricing European options with complete Greeks calculations and Monte Carlo simulation validation, made by a student who realized they wanted to get into quant and CS way too late.
 
 ## Features
 
-- European Options Pricing
-- Complete Greeks Suite (Delta, Gamma, Theta, Vega, Rho)
-- Input Validation
-- Clean Architecture
-- Put-call party verification
-- Multi-option batch processing
-- Automated Greek analysis and interpretation
-- Professional user interface
+- **European Options Pricing**
+  - Analytical Black-Scholes formula
+  - Monte Carlo simulation with 100,000 paths
+  - 95% confidence intervals for MC estimates
+- **Complete Greeks Suite** (Delta, Gamma, Theta, Vega, Rho)
+- **Model Validation**
+  - Put-call parity verification
+  - Black-Scholes vs Monte Carlo comparison
+- **Clean Architecture**
+- **Multi-option batch processing**
+- **Automated Greek analysis and interpretation**
+- **Professional user interface**
 
 **Documentation:**
 - Comprehensive README with mathematical background
 - Inline code documentation
-- technical writeup (in progress - 60% complete)
+- Technical writeup (in progress - 60% complete)
 
 **Planned Enhancements:**
 - Implied volatility calculator (Newton-Raphson method)
@@ -28,6 +32,7 @@ A high-performance C++ implementation of the Black-Scholes-Merton model for pric
 - Dividend-paying stocks support
 - Historical volatility calculator
 - Interactive mode with saved sessions
+- Variance reduction techniques for Monte Carlo
 
 ## Mathematical Background
 
@@ -64,6 +69,33 @@ N(x) = Standard normal cumulative distribution function
 - `r` = Risk-free interest rate (annualized)
 - `σ` = Volatility (annualized standard deviation)
 
+### Monte Carlo Simulation
+
+The Monte Carlo method simulates stock price paths using Geometric Brownian Motion:
+
+**Stock Price at Maturity:**
+```
+S(T) = S₀ * exp((r - 0.5σ²)T + σ√T * Z)
+```
+
+Where `Z ~ N(0,1)` is a standard normal random variable.
+
+**Option Price:**
+```
+Price = e^(-rT) * E[max(S(T) - K, 0)]  // Call
+Price = e^(-rT) * E[max(K - S(T), 0)]  // Put
+```
+
+**Confidence Interval (95%):**
+```
+CI = 1.96 * (standard_deviation / √n)
+```
+
+The Monte Carlo method provides:
+- Independent validation of Black-Scholes prices
+- Flexibility for complex payoffs and exotic options
+- Visual understanding of price uncertainty
+
 ### Greeks
 
 "Greeks" measure the sensitivity of option prices to various parameters. Basically they tell us and other people whether an option is worth buying, selling, or keeping:
@@ -78,27 +110,25 @@ N(x) = Standard normal cumulative distribution function
 
 *Note: N'(x) = (1/√2π)e^(-x²/2) is the standard normal probability density function*
 
-### Installation
-
+## Installation
 ```bash
 # Clone the repository
 git clone https://github.com/ryaneefeng/options-pricing-engine.git
 cd options-pricing-engine
 
 # Compile the program
-g++ -std=c++17 src/main.cpp src/Option.cpp -o bin/pricer -I include
+g++ -std=c++17 src/main.cpp src/Option.cpp src/MonteCarlo.cpp -o bin/pricer
 
 # Run the program
-./pricer
+./bin/pricer
 ```
-**Example Session:**
+
+## Example Session
 ```
 ======================================================
     Black-Scholes Options Pricing Engine v1.0
 ======================================================
 
-How many options would you like to run?
-2
 Enter Stock Price (S): $100
 Enter Strike Price (K): $105
 Enter Time to Maturity (T) in years: 1.0
@@ -127,83 +157,34 @@ Theta:   -1.2832
 Vega:    39.6705
 Rho:     -53.6776
 
+========================================
+        MONTE CARLO SIMULATION
+========================================
+
+CALL OPTION (100,000 simulations)
+Monte Carlo Price: $8.0347 ± $0.0621
+95% CI: [$7.9726, $8.0968]
+Black-Scholes Price: $8.0214
+Difference: $0.0133
+
+PUT OPTION (100,000 simulations)
+Monte Carlo Price: $7.9128 ± $0.0598
+95% CI: [$7.8530, $7.9726]
+Black-Scholes Price: $7.9004
+Difference: $0.0124
+
 ======================================================
                      VALIDATION
 ======================================================
 Put-Call Parity Error: 7.11e-15
 Calculations verified!
-======================================================
-                    CALL ANALYSIS
-======================================================
-Delta: Good value. Reacts strongly to price changes and good for directional trades.
-Gamma: Healthy value as the Delta will move noticeably. Good for trading and Gamma scalping.
-Theta: Heavy time decay: Good for shorting, risky for long-term.
-Vega: Medium sensitivity. Good if you expect rising uncertainty.
-Rho: Big rate sensitivity. Long-term options/high strike.
-======================================================
-                    PUT ANALYSIS
-======================================================
-Delta: Moderately bearish. Balanced downside protection.
-Gamma: Healthy value as the Delta will move noticeably. Good for trading and Gamma scalping.
-Theta: Moderate time decay. Should only hold if you expect a move soon.
-Vega: Medium sensitivity. Good if you expect rising uncertainty.
-Rho: Big rate sensitivity. Long-term options/high strike.
-
-Enter Stock Price (S): $50
-Enter Strike Price (K): $60
-Enter Time to Maturity (T) in years: 4
-Enter Risk-free Rate (r) as decimal (e.g., 0.05 for 5%): 0.03
-Enter Volatility (sigma) as decimal (e.g., 0.20 for 20%): 0.10
-
-Calculating...
-
-======================================================
-                 CALL OPTION
-======================================================
-Price:  $2.7005
-Delta:   0.4162
-Gamma:   0.0390
-Theta:   -1.0309
-Vega:    39.0110
-Rho:     72.4394
-
-======================================================
-                 PUT OPTION
-======================================================
-Price:  $5.9157
-Delta:   -0.5838
-Gamma:   0.0390
-Theta:   0.5655
-Vega:    39.0110
-Rho:     -140.4215
-
-======================================================
-                     VALIDATION
-======================================================
-Put-Call Parity Error: -3.55e-15
-Calculations verified!
-======================================================
-                    CALL ANALYSIS
-======================================================
-Delta: This option will move a bit with the stock, but still not something you would hedge with (more speculative than strategic).
-Gamma: High Gamma. Dangerous if hedging, but great for long options and are aiming for volatility pops.
-Theta: Mild time decay, good for holding long-term.
-Vega: Medium sensitivity. Good if you expect rising uncertainty.
-Rho: Big rate sensitivity. Long-term options/high strike.
-======================================================
-                    PUT ANALYSIS
-======================================================
-Delta: Moderately bearish. Balanced downside protection.
-Gamma: High Gamma. Dangerous if hedging, but great for long options and are aiming for volatility pops.
-Theta: Very slow decay. Cheap to hold.
-Vega: Medium sensitivity. Good if you expect rising uncertainty.
-Rho: Big rate sensitivity. Long-term options/high strike.
+Monte Carlo estimates agree with Black-Scholes within CI!
 ```
 
-### Programmatic Usage
-
+## Programmatic Usage
 ```cpp
 #include "include/Option.h"
+#include "include/MonteCarlo.h"
 
 int main() {
     // Create an option object
@@ -213,37 +194,44 @@ int main() {
                0.05,   // Risk-free rate
                0.20);  // Volatility
     
-    // Calculate prices
+    // Black-Scholes pricing
     double call_price = opt.calculate_call_price();
     double put_price = opt.calculate_put_price();
     
-    // Calculate Greeks
+    // Greeks
     double delta = opt.calculate_delta_call();
     double gamma = opt.calculate_gamma();
     double vega = opt.calculate_vega();
+    
+    // Monte Carlo simulation
+    MonteCarloSimulator mc(100.0, 105.0, 1.0, 0.05, 0.20, 100000);
+    auto call_result = mc.call_price_with_ci();
+    double mc_price = call_result.first;
+    double confidence_interval = call_result.second;
     
     return 0;
 }
 ```
 
 ## Project Structure
-
 ```
 options-pricing-engine/
 ├── src/
 │   ├── main.cpp          # User interface and program entry point
-│   └── Option.cpp        # Option class implementation
+│   ├── Option.cpp        # Black-Scholes implementation
+│   └── MonteCarlo.cpp    # Monte Carlo simulation implementation
 ├── include/
-│   └── Option.h          # Option class header and declarations
+│   ├── Option.h          # Option class header
+│   └── MonteCarlo.h      # Monte Carlo simulator header
 ├── docs/
 │   ├── technical_writeup.md    # Detailed mathematical documentation
 │   └── examples.md             # Usage examples and test cases
 ├── bin/                  # Compiled executables (generated)
 ├── .gitignore
 ├── LICENSE
-├── Makefile
 └── README.md
 ```
+
 ## Educational Value
 
 This project demonstrates:
@@ -251,18 +239,22 @@ This project demonstrates:
 **Financial Mathematics:**
 - Options pricing theory
 - Risk-neutral valuation
-- Stochastic calculus concepts
+- Stochastic calculus concepts (Geometric Brownian Motion)
 - Probability distributions
+- Monte Carlo methods in finance
 
 **Software Engineering:**
 - Object-oriented design in C++
 - Header/implementation separation
 - Clean code principles
 - Documentation best practices
+- Multiple pricing methodologies
 
 **Numerical Computing:**
 - Mathematical function approximation
 - Floating-point precision handling
+- Random number generation
+- Statistical estimation and confidence intervals
 - Performance optimization
 
 ## Technical Details
@@ -270,7 +262,6 @@ This project demonstrates:
 ### Normal CDF Approximation
 
 The standard normal cumulative distribution function N(x) is approximated using the error function:
-
 ```cpp
 double normal_cdf(double x) {
     return 0.5 * erfc(-x * M_SQRT1_2);
@@ -279,27 +270,40 @@ double normal_cdf(double x) {
 
 This provides accuracy to 6+ decimal places, sufficient for financial calculations.
 
+### Monte Carlo Implementation
+
+The Monte Carlo simulator uses:
+- **Random Number Generation**: C++11 `<random>` library with Mersenne Twister (mt19937)
+- **Normal Distribution**: Box-Muller transform via `std::normal_distribution`
+- **Geometric Brownian Motion**: Exact solution for stock price paths
+- **Variance Estimation**: Sample standard deviation for confidence intervals
+
 ### Performance Characteristics
 
-- **Time Complexity**: O(1) for all calculations
-- **Space Complexity**: O(1) (only stores 5 parameters)
-- **Typical Runtime**: < 1ms per calculation on modern hardware
+- **Black-Scholes Time Complexity**: O(1) per calculation
+- **Monte Carlo Time Complexity**: O(n) where n = number of simulations
+- **Space Complexity**: O(1) (streaming computation)
+- **Typical Runtime**: 
+  - Black-Scholes: < 1ms per calculation
+  - Monte Carlo (100k paths): ~50-100ms on modern hardware
 
 ### Precision & Accuracy
 
 - All calculations use `double` precision (IEEE 754 64-bit)
+- Black-Scholes prices accurate to $0.01 or better
 - Greeks accurate to 4+ decimal places
-- Prices accurate to $0.01 or better
+- Monte Carlo 95% CI typically ±$0.05 with 100k simulations
 
 ## Future Enhancements
 
 Planned features for future versions:
 
-- [ ] **American Options**: Early exercise using binomial trees or Monte Carlo
+- [ ] **American Options**: Early exercise using binomial trees or Monte Carlo with Longstaff-Schwartz
 - [ ] **Implied Volatility**: Newton-Raphson solver for implied vol
 - [ ] **Volatility Smile**: Support for non-constant volatility
 - [ ] **Dividend Yield**: Extend model for dividend-paying stocks
-- [ ] **Exotic Options**: Barrier options, Asian options
+- [ ] **Exotic Options**: Barrier options, Asian options, lookback options
+- [ ] **Variance Reduction**: Antithetic variates, control variates for MC
 - [ ] **Portfolio Analysis**: Multi-option portfolio Greeks
 - [ ] **GUI Interface**: Qt-based graphical interface
 - [ ] **Python Bindings**: PyBind11 wrapper for Python integration
@@ -311,6 +315,11 @@ Planned features for future versions:
 **Academic Papers:**
 - Black, F., & Scholes, M. (1973). "The Pricing of Options and Corporate Liabilities." *Journal of Political Economy*, 81(3), 637-654.
 - Merton, R. C. (1973). "Theory of Rational Option Pricing." *Bell Journal of Economics and Management Science*, 4(1), 141-183.
+- Boyle, P. P. (1977). "Options: A Monte Carlo Approach." *Journal of Financial Economics*, 4(3), 323-338.
+
+**Books:**
+- Hull, J. C. (2018). *Options, Futures, and Other Derivatives* (10th ed.). Pearson.
+- Glasserman, P. (2003). *Monte Carlo Methods in Financial Engineering*. Springer.
 
 **Online Resources:**
 - [MIT OpenCourseWare - Mathematical Methods for Quantitative Finance](https://ocw.mit.edu/courses/mathematics/)
@@ -329,3 +338,7 @@ Aspiring Quantitative Researcher with interests in derivatives pricing, algorith
 - LinkedIn: [linkedin.com/in/ryanneefeng](https://linkedin.com/in/ryanneefeng)
 - Email: ryanneefeng@gmail.com
 - GitHub: [@ryaneefeng](https://github.com/ryaneefeng)
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
