@@ -337,7 +337,7 @@ Aspiring Quantitative Researcher with interests in derivatives pricing, algorith
 **Connect:**
 - LinkedIn: [linkedin.com/in/ryanneefeng](https://linkedin.com/in/ryanneefeng)
 - Email: ryanneefeng@gmail.com
-- GitHub: [@ryaneefeng](https://github.com/ryaneefeng)
+- GitHub: [@ryanneefeng](https://github.com/ryanneefeng)
 
 ## License
 
