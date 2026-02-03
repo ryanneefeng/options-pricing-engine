@@ -2,6 +2,7 @@
 #include <iomanip>
 #include "../include/Option.h"
 #include <limits>
+#include "../include/MonteCarlo.h"
 
 using namespace std;
 
@@ -85,7 +86,37 @@ int main() {
         		cout << "Rho:     " << option.calculate_rho_put() << endl;
         		cout << endl;
 
-        		cout << "======================================================" << endl;
+			//Monte Carlo Simulation Section
+			cout << "======================================================" << endl;
+                        cout << "        	MONTE CARLO SIMULATION          " << endl;
+                        cout << "======================================================" << endl;
+
+			MonteCarloSimulator mc(S, K, T, r, sigma, 100000);
+
+			// Call option via Monte Carlo
+			auto call_mc = mc.call_price_with_ci();
+			double call_mc_price = call_mc.first;
+			double call_mc_ci = call_mc.second;
+
+			cout << "CALL OPTION (100,000 simulations)" << endl;
+			cout << "Monte Carlo Price: $" << fixed << setprecision(4) << call_mc_price << " ± $" << call_mc_ci << endl;
+			cout << "95% CI: [$" << call_mc_price - call_mc_ci << ", $" << call_mc_price + call_mc_ci << "]" << endl;
+			cout << "Black-Scholes Price: $" << option.calculate_call_price() << endl;
+			cout << "Difference: $" << call_mc_price - option.calculate_call_price() << endl;
+
+			// Put option via Monte Carlo
+			auto put_mc = mc.put_price_with_ci();
+			double put_mc_price = put_mc.first;
+			double put_mc_ci = put_mc.second;
+
+			cout << "\nPUT OPTION (100,000 simulations)" << endl;
+			cout << "Monte Carlo Price: $" << fixed << setprecision(4) << put_mc_price << " ± $" << put_mc_ci << endl;
+			cout << "95% CI: [$" << put_mc_price - put_mc_ci << ", $" << put_mc_price + put_mc_ci << "]" << endl;
+			cout << "Black-Scholes Price: $" << option.calculate_put_price() << endl;
+			cout << "Difference: $" << put_mc_price - option.calculate_put_price() << endl;
+			cout << endl;
+
+			cout << "======================================================" << endl;
         		cout << "                     VALIDATION                      " << endl;
         		cout << "======================================================" << endl;
         		double parity_error = option.verify_put_call_parity();

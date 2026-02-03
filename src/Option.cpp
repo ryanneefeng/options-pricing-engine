@@ -1,6 +1,7 @@
 #include "../include/Option.h"
 #include <cmath>
 #include <stdexcept>
+#include <algorithm>
 
 // Mathematical constants
 const double PI = 3.14159265358979323846;
