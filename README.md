@@ -294,33 +294,6 @@ The Monte Carlo simulator uses:
 - Greeks accurate to 4+ decimal places
 - Monte Carlo 95% CI typically ±$0.05 with 100k simulations
 
-## Future Enhancements
-
-Planned features for future versions:
-
-- [ ] **American Options**: Early exercise using binomial trees or Monte Carlo with Longstaff-Schwartz
-- [ ] **Implied Volatility**: Newton-Raphson solver for implied vol
-- [ ] **Volatility Smile**: Support for non-constant volatility
-- [ ] **Dividend Yield**: Extend model for dividend-paying stocks
-- [ ] **Exotic Options**: Barrier options, Asian options, lookback options
-- [ ] **Variance Reduction**: Antithetic variates, control variates for MC
-- [ ] **Portfolio Analysis**: Multi-option portfolio Greeks
-- [ ] **GUI Interface**: Qt-based graphical interface
-- [ ] **Python Bindings**: PyBind11 wrapper for Python integration
-- [ ] **Unit Tests**: Comprehensive test suite with Google Test
-- [ ] **Benchmarking**: Performance comparison suite
-
-## Resources & References
-
-**Academic Papers:**
-- Black, F., & Scholes, M. (1973). "The Pricing of Options and Corporate Liabilities." *Journal of Political Economy*, 81(3), 637-654.
-- Merton, R. C. (1973). "Theory of Rational Option Pricing." *Bell Journal of Economics and Management Science*, 4(1), 141-183.
-- Boyle, P. P. (1977). "Options: A Monte Carlo Approach." *Journal of Financial Economics*, 4(3), 323-338.
-
-**Books:**
-- Hull, J. C. (2018). *Options, Futures, and Other Derivatives* (10th ed.). Pearson.
-- Glasserman, P. (2003). *Monte Carlo Methods in Financial Engineering*. Springer.
-
 **Online Resources:**
 - [MIT OpenCourseWare - Mathematical Methods for Quantitative Finance](https://ocw.mit.edu/courses/mathematics/)
 - [QuantLib - Open-source quantitative finance library](https://www.quantlib.org/)
@@ -329,15 +302,12 @@ Planned features for future versions:
 ## Author
 
 **Ryan Feng**  
-Fordham University | Class of 2028  
-Mathematics & Computer Science
-
-Aspiring Quantitative Researcher with interests in derivatives pricing, algorithmic trading, and financial engineering.
+Cornell University CAS | B.A Mathematics - Minor: Computer Science, Statistics | Class of 2029  
 
 **Connect:**
 - LinkedIn: [linkedin.com/in/ryanneefeng](https://linkedin.com/in/ryanneefeng)
 - Email: ryanneefeng@gmail.com
-- GitHub: [@ryaneefeng](https://github.com/ryaneefeng)
+- GitHub: [@ryanneefeng](https://github.com/ryanneefeng)
 
 ## License
 
