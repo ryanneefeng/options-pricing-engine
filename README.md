@@ -125,60 +125,73 @@ g++ -std=c++17 src/main.cpp src/Option.cpp src/MonteCarlo.cpp -o bin/pricer
 
 ## Example Session
 ```
-======================================================
-    Black-Scholes Options Pricing Engine v1.0
-======================================================
+$ make
+g++ -std=c++17 -Wall -Wextra -O2 -Iinclude -c src/main.cpp -o build/main.o
+g++ -std=c++17 -Wall -Wextra -O2 -Iinclude -c src/option.cpp -o build/option.o
+g++ -std=c++17 -Wall -Wextra -O2 -Iinclude -c src/MonteCarlo.cpp -o build/MonteCarlo.o
+mkdir -p bin
+g++ -std=c++17 -Wall -Wextra -O2 -Iinclude -o bin/pricer build/main.o build/option.o build/MonteCarlo.o
 
+$ ./bin/pricer
+How many options would you like to run? 1
 Enter Stock Price (S): $100
 Enter Strike Price (K): $105
-Enter Time to Maturity (T) in years: 1.0
+Enter Time to Maturity (T) in years: 0.5
 Enter Risk-free Rate (r) as decimal (e.g., 0.05 for 5%): 0.05
 Enter Volatility (sigma) as decimal (e.g., 0.20 for 20%): 0.20
-
-Calculating...
 
 ======================================================
                  CALL OPTION
 ======================================================
-Price:  $8.0214
-Delta:   0.5422
-Gamma:   0.0198
-Theta:   -6.2771
-Vega:    39.6705
-Rho:     46.2015
+Price:  $4.5817
+Delta:   0.4612
+Gamma:   0.0281
+Theta:   -7.6919
+Vega:    28.0757
+Rho:     20.7672
 
 ======================================================
-                 PUT OPTION
+                     PUT OPTION
 ======================================================
-Price:  $7.9004
-Delta:   -0.4578
-Gamma:   0.0198
-Theta:   -1.2832
-Vega:    39.6705
-Rho:     -53.6776
+Price:  $6.9892
+Delta:   -0.5388
+Gamma:   0.0281
+Theta:   -2.5715
+Vega:    28.0757
+Rho:     -30.4366
 
-========================================
-        MONTE CARLO SIMULATION
-========================================
-
+======================================================
+           MONTE CARLO SIMULATION
+======================================================
 CALL OPTION (100,000 simulations)
-Monte Carlo Price: $8.0347 ± $0.0621
-95% CI: [$7.9726, $8.0968]
-Black-Scholes Price: $8.0214
-Difference: $0.0133
+Monte Carlo Price: $4.5771 ± $0.0505
+95% CI: [$4.5266, $4.6276]
+Black-Scholes Price: $4.5817
+Difference: $-0.0046
 
 PUT OPTION (100,000 simulations)
-Monte Carlo Price: $7.9128 ± $0.0598
-95% CI: [$7.8530, $7.9726]
-Black-Scholes Price: $7.9004
-Difference: $0.0124
+Monte Carlo Price: $7.0078 ± $0.0523
+95% CI: [$6.9555, $7.0602]
+Black-Scholes Price: $6.9892
+Difference: $0.0186
 
 ======================================================
                      VALIDATION
 ======================================================
 Put-Call Parity Error: 7.11e-15
 Calculations verified!
-Monte Carlo estimates agree with Black-Scholes within CI!
+
+======================================================
+                   GREEK SUMMARY
+======================================================
+          CALL          PUT
+------------------------------------------------------
+Delta:    0.4612        -0.5388
+Gamma:    0.0281        0.0281
+Theta:    -7.6919       -2.5715
+Vega:     28.0757       28.0757
+Rho:      20.7672       -30.4366
+======================================================
 ```
 
 ## Programmatic Usage
