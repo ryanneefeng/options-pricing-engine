@@ -4,7 +4,7 @@
 [![C++](https://img.shields.io/badge/C++-17-blue.svg)](https://isocpp.org/)
 [![Status](https://img.shields.io/badge/Status-Active-success.svg)]()
 
-A high-performance C++ implementation of the Black-Scholes-Merton model for pricing European options with complete Greeks calculations and Monte Carlo simulation validation, made by a student who realized they wanted to get into quant and CS way too late.
+A C++ implementation of the Black-Scholes-Merton model for pricing European options with complete Greeks calculations and Monte Carlo simulation validation.
 
 ## Features
 
@@ -18,7 +18,6 @@ A high-performance C++ implementation of the Black-Scholes-Merton model for pric
   - Black-Scholes vs Monte Carlo comparison
 - **Clean Architecture**
 - **Multi-option batch processing**
-- **Automated Greek analysis and interpretation**
 - **Professional user interface**
 
 **Documentation:**
@@ -98,8 +97,6 @@ The Monte Carlo method provides:
 
 ### Greeks
 
-"Greeks" measure the sensitivity of option prices to various parameters. Basically they tell us and other people whether an option is worth buying, selling, or keeping:
-
 | Greek | Measures | Call Formula | Put Formula |
 |-------|----------|--------------|-------------|
 | **Delta (Δ)** | Rate of change w.r.t. underlying price | N(d₁) | N(d₁) - 1 |
@@ -112,14 +109,9 @@ The Monte Carlo method provides:
 
 ## Installation
 ```bash
-# Clone the repository
 git clone https://github.com/ryaneefeng/options-pricing-engine.git
 cd options-pricing-engine
-
-# Compile the program
-g++ -std=c++17 src/main.cpp src/Option.cpp src/MonteCarlo.cpp -o bin/pricer
-
-# Run the program
+make
 ./bin/pricer
 ```
 
@@ -231,17 +223,17 @@ int main() {
 options-pricing-engine/
 ├── src/
 │   ├── main.cpp          # User interface and program entry point
-│   ├── Option.cpp        # Black-Scholes implementation
+│   ├── option.cpp        # Black-Scholes implementation
 │   └── MonteCarlo.cpp    # Monte Carlo simulation implementation
 ├── include/
-│   ├── Option.h          # Option class header
+│   ├── option.h          # Option class header
 │   └── MonteCarlo.h      # Monte Carlo simulator header
 ├── docs/
 │   ├── technical_writeup.md    # Detailed mathematical documentation
-│   └── examples.md             # Usage examples and test cases
 ├── bin/                  # Compiled executables (generated)
 ├── .gitignore
 ├── LICENSE
+├── Makefile
 └── README.md
 ```
 
