@@ -1,7 +1,7 @@
 CXX      := g++
 CXXFLAGS := -std=c++17 -Wall -Wextra -O2 -Iinclude
 TARGET   := bin/pricer
-SRCS     := src/main.cpp src/Option.cpp src/MonteCarlo.cpp
+SRCS     := src/main.cpp src/option.cpp src/MonteCarlo.cpp
 OBJS     := $(SRCS:src/%.cpp=build/%.o)
 
 .PHONY: all clean
