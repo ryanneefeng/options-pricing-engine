@@ -188,7 +188,7 @@ Rho:      20.7672       -30.4366
 
 ## Programmatic Usage
 ```cpp
-#include "include/Option.h"
+#include "include/option.h"
 #include "include/MonteCarlo.h"
 
 int main() {
