@@ -9,16 +9,16 @@ OBJS     := $(SRCS:src/%.cpp=build/%.o)
 all: $(TARGET)
 
 $(TARGET): $(OBJS) | bin
-  $(CXX) $(CXXFLAGS) -o $@ $^
+	$(CXX) $(CXXFLAGS) -o $@ $^
 
 build/%.o: src/%.cpp | build
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 bin:
-  mkdir -p bin
+	mkdir -p bin
 
 build:
-  mkdir -p build
+	mkdir -p build
 
 clean:
 	rm -rf build bin
