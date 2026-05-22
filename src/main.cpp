@@ -22,8 +22,8 @@ double get_positive_input(const string& prompt){
 }
 
 int main() {
-		cout << "======================================================" << endl;
-		cout << "    Black-Scholes Options Pricing Engine v1.0" << endl;
+	cout << "======================================================" << endl;
+	cout << "    Black-Scholes Options Pricing Engine v1.0" << endl;
     	cout << "======================================================" << endl;
     	cout << endl;
 
@@ -86,74 +86,74 @@ int main() {
         		cout << "Rho:     " << option.calculate_rho_put() << endl;
         		cout << endl;
 
-				//Monte Carlo Simulation Section
-				cout << "======================================================" << endl;
-	            cout << "        	MONTE CARLO SIMULATION          " << endl;
-	            cout << "======================================================" << endl;
+			//Monte Carlo Simulation Section
+			cout << "======================================================" << endl;
+	            	cout << "        	MONTE CARLO SIMULATION          " << endl;
+	            	cout << "======================================================" << endl;
 	
-				MonteCarloSimulator mc(S, K, T, r, sigma, 100000);
+			MonteCarloSimulator mc(S, K, T, r, sigma, 100000);
+
+			// Call option via Monte Carlo
+			auto call_mc = mc.call_price_with_ci();
+			double call_mc_price = call_mc.first;
+			double call_mc_ci = call_mc.second;
 	
-				// Call option via Monte Carlo
-				auto call_mc = mc.call_price_with_ci();
-				double call_mc_price = call_mc.first;
-				double call_mc_ci = call_mc.second;
+			cout << "CALL OPTION (100,000 simulations)" << endl;
+			cout << "Monte Carlo Price: $" << fixed << setprecision(4) << call_mc_price << " ± $" << call_mc_ci << endl;
+			cout << "95% CI: [$" << call_mc_price - call_mc_ci << ", $" << call_mc_price + call_mc_ci << "]" << endl;
+			cout << "Black-Scholes Price: $" << option.calculate_call_price() << endl;
+			cout << "Difference: $" << call_mc_price - option.calculate_call_price() << endl;
 	
-				cout << "CALL OPTION (100,000 simulations)" << endl;
-				cout << "Monte Carlo Price: $" << fixed << setprecision(4) << call_mc_price << " ± $" << call_mc_ci << endl;
-				cout << "95% CI: [$" << call_mc_price - call_mc_ci << ", $" << call_mc_price + call_mc_ci << "]" << endl;
-				cout << "Black-Scholes Price: $" << option.calculate_call_price() << endl;
-				cout << "Difference: $" << call_mc_price - option.calculate_call_price() << endl;
+			// Put option via Monte Carlo
+			auto put_mc = mc.put_price_with_ci();
+			double put_mc_price = put_mc.first;
+			double put_mc_ci = put_mc.second;
+
+			cout << "\nPUT OPTION (100,000 simulations)" << endl;
+			cout << "Monte Carlo Price: $" << fixed << setprecision(4) << put_mc_price << " ± $" << put_mc_ci << endl;
+			cout << "95% CI: [$" << put_mc_price - put_mc_ci << ", $" << put_mc_price + put_mc_ci << "]" << endl;
+			cout << "Black-Scholes Price: $" << option.calculate_put_price() << endl;
+			cout << "Difference: $" << put_mc_price - option.calculate_put_price() << endl;
+			cout << endl;
+
+			cout << "======================================================" << endl;
+        		cout << "                     VALIDATION                      " << endl;
+			cout << "======================================================" << endl;
+	        	double parity_error = option.verify_put_call_parity();
+	       		cout << "Put-Call Parity Error: " << scientific << setprecision(2) << parity_error << endl;
+	       		if (abs(parity_error) < 0.0001) {
+	                	cout << "Calculations verified!" << endl;
+	        	}
+	        	else {
+	               		cout << "Warning: Large parity error detected" << endl;
+	       		}
 	
-				// Put option via Monte Carlo
-				auto put_mc = mc.put_price_with_ci();
-				double put_mc_price = put_mc.first;
-				double put_mc_ci = put_mc.second;
-	
-				cout << "\nPUT OPTION (100,000 simulations)" << endl;
-				cout << "Monte Carlo Price: $" << fixed << setprecision(4) << put_mc_price << " ± $" << put_mc_ci << endl;
-				cout << "95% CI: [$" << put_mc_price - put_mc_ci << ", $" << put_mc_price + put_mc_ci << "]" << endl;
-				cout << "Black-Scholes Price: $" << option.calculate_put_price() << endl;
-				cout << "Difference: $" << put_mc_price - option.calculate_put_price() << endl;
-				cout << endl;
-	
-				cout << "======================================================" << endl;
-	        	cout << "                     VALIDATION                      " << endl;
-	        	cout << "======================================================" << endl;
-	        		double parity_error = option.verify_put_call_parity();
-	        		cout << "Put-Call Parity Error: " << scientific << setprecision(2) << parity_error << endl;
-	        		if (abs(parity_error) < 0.0001) {
-	                 		cout << "Calculations verified!" << endl;
-	        		}
-	        		else {
-	                		cout << "Warning: Large parity error detected" << endl;
-	        		}
-	
-	        	// Greek Summary Table
-				cout << "======================================================" << endl;
-				cout << "                   GREEK SUMMARY                     " << endl;
-				cout << "======================================================" << endl;
-				cout << left << setw(10) << ""
-	     			 << setw(14) << "CALL"
-	      			 << setw(14) << "PUT" << endl;
-				cout << "------------------------------------------------------" << endl;
-				cout << fixed << setprecision(4);
-				cout << setw(10) << "Delta:"
-				     << setw(14) << option.calculate_delta_call()
-				     << setw(14) << option.calculate_delta_put() << endl;
-				cout << setw(10) << "Gamma:"
-				     << setw(14) << option.calculate_gamma()
-				     << setw(14) << option.calculate_gamma() << endl;
-				cout << setw(10) << "Theta:"
-				     << setw(14) << option.calculate_theta_call()
-				     << setw(14) << option.calculate_theta_put() << endl;
-				cout << setw(10) << "Vega:"
-				     << setw(14) << option.calculate_vega()
-				     << setw(14) << option.calculate_vega() << endl;
-				cout << setw(10) << "Rho:"
-				     << setw(14) << option.calculate_rho_call()
-				     << setw(14) << option.calculate_rho_put() << endl;
-				cout << "======================================================" << endl;
-			}
+	       		// Greek Summary Table
+			cout << "======================================================" << endl;
+			cout << "                   GREEK SUMMARY                     " << endl;
+			cout << "======================================================" << endl;
+			cout << left << setw(10) << ""
+	    		     << setw(14) << "CALL"
+	      		     << setw(14) << "PUT" << endl;
+			cout << "------------------------------------------------------" << endl;
+			cout << fixed << setprecision(4);
+			cout << setw(10) << "Delta:"
+			     << setw(14) << option.calculate_delta_call()
+			     << setw(14) << option.calculate_delta_put() << endl;
+			cout << setw(10) << "Gamma:"
+			     << setw(14) << option.calculate_gamma()
+			     << setw(14) << option.calculate_gamma() << endl;
+			cout << setw(10) << "Theta:"
+			     << setw(14) << option.calculate_theta_call()
+			     << setw(14) << option.calculate_theta_put() << endl;
+			cout << setw(10) << "Vega:"
+			     << setw(14) << option.calculate_vega()
+			     << setw(14) << option.calculate_vega() << endl;
+			cout << setw(10) << "Rho:"
+			     << setw(14) << option.calculate_rho_call()
+			     << setw(14) << option.calculate_rho_put() << endl;
+			cout << "======================================================" << endl;
+		}
 		catch (const exception& e) {
         		cerr << "Error: " << e.what() << endl;
         		continue;

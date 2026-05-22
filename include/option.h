@@ -34,6 +34,8 @@ public:
     	double verify_put_call_parity() const;
     	double calculate_rho_call() const;
     	double calculate_rho_put() const;
+	double implied_volatility_call(double market_price, double sigma_init = 0.20);
+	double implied_volatility_put(double market_price, double sigma_init = 0.20);
 };
 
 #endif
