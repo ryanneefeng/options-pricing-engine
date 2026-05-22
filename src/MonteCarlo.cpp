@@ -20,20 +20,20 @@ double MonteCarloSimulator::simulate_stock_path() {
 	return ST;
 }
 
-// Price European put using Monte Carlo
-double MonteCarloSimulator::price_put_mc() {
-    	double sum_payoff = 0.0;
+// Price European call using Monte Carlo
+double MonteCarloSimulator::price_call_mc() {
+	double sum_payoff = 0.0;
 
-    	for (int i = 0; i < num_simulations; ++i) {
-        	double ST = simulate_stock_path();
-        	double payoff = std::max(K - ST, 0.0);
-        	sum_payoff += payoff;
-    	}
+	for (int i = 0; i < num_simulations; ++i) {
+		double ST = simulate_stock_path();
+		double payoff = std::max(ST - K, 0.0);
+		sum_payoff += payoff;
+	}
 
-    	double average_payoff = sum_payoff / static_cast<double>(num_simulations);
+	double average_payoff = sum_payoff / static_cast<double>(num_simulations);
 	double price = average_payoff * std::exp(-r * T);
 
-    	return price;
+	return price;
 }
 
 // Call price with 95% confidence interval

@@ -86,173 +86,74 @@ int main() {
         		cout << "Rho:     " << option.calculate_rho_put() << endl;
         		cout << endl;
 
-			//Monte Carlo Simulation Section
-			cout << "======================================================" << endl;
-                        cout << "        	MONTE CARLO SIMULATION          " << endl;
-                        cout << "======================================================" << endl;
-
-			MonteCarloSimulator mc(S, K, T, r, sigma, 100000);
-
-			// Call option via Monte Carlo
-			auto call_mc = mc.call_price_with_ci();
-			double call_mc_price = call_mc.first;
-			double call_mc_ci = call_mc.second;
-
-			cout << "CALL OPTION (100,000 simulations)" << endl;
-			cout << "Monte Carlo Price: $" << fixed << setprecision(4) << call_mc_price << " ± $" << call_mc_ci << endl;
-			cout << "95% CI: [$" << call_mc_price - call_mc_ci << ", $" << call_mc_price + call_mc_ci << "]" << endl;
-			cout << "Black-Scholes Price: $" << option.calculate_call_price() << endl;
-			cout << "Difference: $" << call_mc_price - option.calculate_call_price() << endl;
-
-			// Put option via Monte Carlo
-			auto put_mc = mc.put_price_with_ci();
-			double put_mc_price = put_mc.first;
-			double put_mc_ci = put_mc.second;
-
-			cout << "\nPUT OPTION (100,000 simulations)" << endl;
-			cout << "Monte Carlo Price: $" << fixed << setprecision(4) << put_mc_price << " ± $" << put_mc_ci << endl;
-			cout << "95% CI: [$" << put_mc_price - put_mc_ci << ", $" << put_mc_price + put_mc_ci << "]" << endl;
-			cout << "Black-Scholes Price: $" << option.calculate_put_price() << endl;
-			cout << "Difference: $" << put_mc_price - option.calculate_put_price() << endl;
-			cout << endl;
-
-			cout << "======================================================" << endl;
-        		cout << "                     VALIDATION                      " << endl;
-        		cout << "======================================================" << endl;
-        		double parity_error = option.verify_put_call_parity();
-        		cout << "Put-Call Parity Error: " << scientific << setprecision(2) << parity_error << endl;
-        		if (abs(parity_error) < 0.0001) {
-                 		cout << "Calculations verified!" << endl;
-        		}
-        		else {
-                		cout << "Warning: Large parity error detected" << endl;
-        		}
-
-        	cout << "======================================================" << endl;
-			cout << "                    CALL ANALYSIS                       " << endl;
-			cout << "======================================================" << endl;
-
-			// Delta Analysis
-			if (option.calculate_delta_call() <= 0.25){
-    			cout << "Delta: Delta is pretty low, so the price movement won't help much. Basically, don't expect it to move unless something dramatic happens." << endl;
+				//Monte Carlo Simulation Section
+				cout << "======================================================" << endl;
+	            cout << "        	MONTE CARLO SIMULATION          " << endl;
+	            cout << "======================================================" << endl;
+	
+				MonteCarloSimulator mc(S, K, T, r, sigma, 100000);
+	
+				// Call option via Monte Carlo
+				auto call_mc = mc.call_price_with_ci();
+				double call_mc_price = call_mc.first;
+				double call_mc_ci = call_mc.second;
+	
+				cout << "CALL OPTION (100,000 simulations)" << endl;
+				cout << "Monte Carlo Price: $" << fixed << setprecision(4) << call_mc_price << " ± $" << call_mc_ci << endl;
+				cout << "95% CI: [$" << call_mc_price - call_mc_ci << ", $" << call_mc_price + call_mc_ci << "]" << endl;
+				cout << "Black-Scholes Price: $" << option.calculate_call_price() << endl;
+				cout << "Difference: $" << call_mc_price - option.calculate_call_price() << endl;
+	
+				// Put option via Monte Carlo
+				auto put_mc = mc.put_price_with_ci();
+				double put_mc_price = put_mc.first;
+				double put_mc_ci = put_mc.second;
+	
+				cout << "\nPUT OPTION (100,000 simulations)" << endl;
+				cout << "Monte Carlo Price: $" << fixed << setprecision(4) << put_mc_price << " ± $" << put_mc_ci << endl;
+				cout << "95% CI: [$" << put_mc_price - put_mc_ci << ", $" << put_mc_price + put_mc_ci << "]" << endl;
+				cout << "Black-Scholes Price: $" << option.calculate_put_price() << endl;
+				cout << "Difference: $" << put_mc_price - option.calculate_put_price() << endl;
+				cout << endl;
+	
+				cout << "======================================================" << endl;
+	        	cout << "                     VALIDATION                      " << endl;
+	        	cout << "======================================================" << endl;
+	        		double parity_error = option.verify_put_call_parity();
+	        		cout << "Put-Call Parity Error: " << scientific << setprecision(2) << parity_error << endl;
+	        		if (abs(parity_error) < 0.0001) {
+	                 		cout << "Calculations verified!" << endl;
+	        		}
+	        		else {
+	                		cout << "Warning: Large parity error detected" << endl;
+	        		}
+	
+	        	// Greek Summary Table
+				cout << "======================================================" << endl;
+				cout << "                   GREEK SUMMARY                     " << endl;
+				cout << "======================================================" << endl;
+				cout << left << setw(10) << ""
+	     			 << setw(14) << "CALL"
+	      			 << setw(14) << "PUT" << endl;
+				cout << "------------------------------------------------------" << endl;
+				cout << fixed << setprecision(4);
+				cout << setw(10) << "Delta:"
+				     << setw(14) << option.calculate_delta_call()
+				     << setw(14) << option.calculate_delta_put() << endl;
+				cout << setw(10) << "Gamma:"
+				     << setw(14) << option.calculate_gamma()
+				     << setw(14) << option.calculate_gamma() << endl;
+				cout << setw(10) << "Theta:"
+				     << setw(14) << option.calculate_theta_call()
+				     << setw(14) << option.calculate_theta_put() << endl;
+				cout << setw(10) << "Vega:"
+				     << setw(14) << option.calculate_vega()
+				     << setw(14) << option.calculate_vega() << endl;
+				cout << setw(10) << "Rho:"
+				     << setw(14) << option.calculate_rho_call()
+				     << setw(14) << option.calculate_rho_put() << endl;
+				cout << "======================================================" << endl;
 			}
-			else if (option.calculate_delta_call() > 0.25 && option.calculate_delta_call() <= 0.50){
-    			cout << "Delta: This option will move a bit with the stock, but still not something you would hedge with (more speculative than strategic)." << endl;
-			}
-			else if (option.calculate_delta_call() > 0.50 && option.calculate_delta_call() <= 0.70){
-    			cout << "Delta: Good value. Reacts strongly to price changes and good for directional trades." << endl;
-			}
-			else if (option.calculate_delta_call() > 0.70 && option.calculate_delta_call() <= 0.90){
-   	 		cout << "Delta: Good for leveraging with a lower upfront cost. Not cheap, but strong." << endl;
-			}
-			else if (option.calculate_delta_call() > 0.90 && option.calculate_delta_call() <= 1.00){ 
-    			cout << "Delta: You're basically holding the stock. Not much optionality." << endl;
-			}
-
-			// Gamma Analysis
-			if (option.calculate_gamma() < 0.01){
-    			cout << "Gamma: Very stable, won't need rebalancing and not much convexity." << endl;
-			}
-			else if (option.calculate_gamma() >= 0.01 && option.calculate_gamma() < 0.03){
-    			cout << "Gamma: Healthy value as the Delta will move noticeably. Good for trading and Gamma scalping." << endl;
-			}
-			else if (option.calculate_gamma() >= 0.03){
-    			cout << "Gamma: High Gamma. Dangerous if hedging, but great for long options and are aiming for volatility pops." << endl;
-			}
-
-			// Theta Analysis
-			if (option.calculate_theta_call() > -2){
-    			cout << "Theta: Mild time decay, good for holding long-term." << endl;
-			}
-			else if (option.calculate_theta_call() >= -6 && option.calculate_theta_call() <= -2){
-    			cout << "Theta: Moderate time decay. Should only hold if you expect a move soon." << endl;
-			}
-			else if (option.calculate_theta_call() < -6){
-    			cout << "Theta: Heavy time decay: Good for shorting, risky for long-term." << endl;
-			}
-
-			// Vega Analysis
-			if (option.calculate_vega() < 20){
-    			cout << "Vega: Low volatility sensitivity. IV shifts won't affect price much." << endl;
-			}
-			else if (option.calculate_vega() >= 20 && option.calculate_vega() < 50){
-    			cout << "Vega: Medium sensitivity. Good if you expect rising uncertainty." << endl;
-			}
-			else if (option.calculate_vega() >= 50){
-    			cout << "Vega: High sensitivity. High profits, high risk." << endl;
-			}
-
-			// Rho Analysis
-			if (option.calculate_rho_call() < 10){
-    			cout << "Rho: Rate changes barely matter." << endl;
-			}
-			else if (option.calculate_rho_call() >= 10 && option.calculate_rho_call() < 40){
-    			cout << "Rho: Moderate rate exposure." << endl;
-			}
-			else if (option.calculate_rho_call() >= 40){
-    			cout << "Rho: Big rate sensitivity. Long-term options/high strike." << endl;
-			}
-
-			cout << "======================================================" << endl;
-            cout << "                    PUT ANALYSIS                       " << endl;
-            cout << "======================================================" << endl;
-			
-			// Delta Analysis
-			if (option.calculate_delta_put() > -0.25){
-	    		cout << "Delta: Weak bearish exposure. Barely moves with the stock." << endl;
-			}
-			else if (option.calculate_delta_put() <= -0.25 && option.calculate_delta_put() > -0.65){
-		    	cout << "Delta: Moderately bearish. Balanced downside protection." << endl;
-			}
-			else if (option.calculate_delta_put() <= -0.65){
-		    	cout << "Delta: Strong bearish. Behaves almost like a short stock." << endl;
-			}
-
-			// Gamma Analysis (same for call and put)
-			if (option.calculate_gamma() < 0.01){
-    			cout << "Gamma: Very stable, won't need rebalancing and not much convexity." << endl;
-			}
-			else if (option.calculate_gamma() >= 0.01 && option.calculate_gamma() < 0.03){
-		    	cout << "Gamma: Healthy value as the Delta will move noticeably. Good for trading and Gamma scalping." << endl;
-			}
-			else if (option.calculate_gamma() >= 0.03){
-		    	cout << "Gamma: High Gamma. Dangerous if hedging, but great for long options and are aiming for volatility pops." << endl;
-			}
-
-			// Theta Analysis
-			if (option.calculate_theta_put() > -1){
-    			cout << "Theta: Very slow decay. Cheap to hold." << endl;
-			}
-			else if (option.calculate_theta_put() >= -3 && option.calculate_theta_put() <= -1){
-    			cout << "Theta: Moderate time decay. Should only hold if you expect a move soon." << endl;
-			}
-			else if (option.calculate_theta_put() < -3){
-   		 	cout << "Theta: Heavy time decay. Good for shorting, risky for long-term." << endl;
-			}
-
-			// Vega Analysis (same for call and put)
-			if (option.calculate_vega() < 20){
-    			cout << "Vega: Low volatility sensitivity. IV shifts won't affect price much." << endl;
-			}
-			else if (option.calculate_vega() >= 20 && option.calculate_vega() < 50){
-    			cout << "Vega: Medium sensitivity. Good if you expect rising uncertainty." << endl;
-			}
-			else if (option.calculate_vega() >= 50){
-    			cout << "Vega: High sensitivity. High profits, high risk." << endl;
-			}
-
-			// Rho Analysis
-			if (option.calculate_rho_put() > -10){
-    			cout << "Rho: Rate changes barely matter." << endl;
-			}
-			else if (option.calculate_rho_put() <= -10 && option.calculate_rho_put() > -40){
-    			cout << "Rho: Moderate rate exposure." << endl;
-			}
-			else if (option.calculate_rho_put() <= -40){
-    			cout << "Rho: Big rate sensitivity. Long-term options/high strike." << endl;
-			}
-
-		}
 		catch (const exception& e) {
         		cerr << "Error: " << e.what() << endl;
         		continue;

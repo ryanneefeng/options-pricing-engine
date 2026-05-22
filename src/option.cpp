@@ -6,7 +6,6 @@
 // Mathematical constants
 const double PI = 3.14159265358979323846;
 const double SQRT_2PI = 2.506628274631000502;
-const double M_SQRT1_2 = 0.7071067811865476;
 
 /**
  * Constructor: Initializes option with given parameters
