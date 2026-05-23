@@ -4,7 +4,7 @@
 [![C++](https://img.shields.io/badge/C++-17-blue.svg)](https://isocpp.org/)
 [![Status](https://img.shields.io/badge/Status-Active-success.svg)]()
 
-A C++ implementation of the Black-Scholes-Merton model for pricing European options with complete Greeks calculations and Monte Carlo simulation validation.
+A C++ implementation of the Black-Scholes-Merton model for pricing European options with complete Greeks calculations, Monte Carlo simulation validation, and implied volatility solving via Newton-Raphson.
 
 ## Features
 
@@ -13,6 +13,7 @@ A C++ implementation of the Black-Scholes-Merton model for pricing European opti
   - Monte Carlo simulation with 100,000 paths
   - 95% confidence intervals for MC estimates
 - **Complete Greeks Suite** (Delta, Gamma, Theta, Vega, Rho)
+- **Implied Volatility Solver (Newton-Raphson method)**
 - **Model Validation**
   - Put-call parity verification
   - Black-Scholes vs Monte Carlo comparison
@@ -26,12 +27,11 @@ A C++ implementation of the Black-Scholes-Merton model for pricing European opti
 - Technical writeup (in progress - 60% complete)
 
 **Planned Enhancements:**
-- Implied volatility calculator (Newton-Raphson method)
 - American options pricing (binomial tree)
 - Dividend-paying stocks support
 - Historical volatility calculator
-- Interactive mode with saved sessions
 - Variance reduction techniques for Monte Carlo
+- Python interface for backtesting
 
 ## Mathematical Background
 
@@ -117,11 +117,12 @@ make
 
 ## Example Session
 ```
-mkdir -p bin build
-g++ -std=c++17 -Wall -O2 -Iinclude -c src/main.cpp -o build/main.o
-g++ -std=c++17 -Wall -O2 -Iinclude -c src/option.cpp -o build/option.o
-g++ -std=c++17 -Wall -O2 -Iinclude -c src/MonteCarlo.cpp -o build/MonteCarlo.o
-g++ -std=c++17 -Wall -O2 -Iinclude -o bin/pricer build/main.o build/option.o build/MonteCarlo.o
+$ make
+g++ -std=c++17 -Wall -Wextra -O2 -Iinclude -c src/main.cpp -o build/main.o
+g++ -std=c++17 -Wall -Wextra -O2 -Iinclude -c src/option.cpp -o build/option.o
+g++ -std=c++17 -Wall -Wextra -O2 -Iinclude -c src/MonteCarlo.cpp -o build/MonteCarlo.o
+mkdir -p bin
+g++ -std=c++17 -Wall -Wextra -O2 -Iinclude -o bin/pricer build/main.o build/option.o build/MonteCarlo.o
 
 $ ./bin/pricer
 ======================================================
@@ -157,12 +158,12 @@ Rho:     -30.4366
                 MONTE CARLO SIMULATION
 ======================================================
 CALL OPTION (100,000 simulations)
-Monte Carlo Price: $4.5992 ┬▒ $0.0508
+Monte Carlo Price: $4.5992 ± $0.0508
 95% CI: [$4.5484, $4.6499]
 Black-Scholes Price: $4.5817
 Difference: $0.0175
 PUT OPTION (100,000 simulations)
-Monte Carlo Price: $7.0228 ┬▒ $0.0523
+Monte Carlo Price: $7.0228 ± $0.0523
 95% CI: [$6.9705, $7.0752]
 Black-Scholes Price: $6.9892
 Difference: $0.0336
@@ -199,28 +200,29 @@ Put Implied Volatility: 19.9999%
 #include "include/MonteCarlo.h"
 
 int main() {
-    // Create an option object
     Option opt(100.0,  // Stock price
                105.0,  // Strike price
                1.0,    // Time to maturity (years)
                0.05,   // Risk-free rate
                0.20);  // Volatility
-    
+
     // Black-Scholes pricing
     double call_price = opt.calculate_call_price();
-    double put_price = opt.calculate_put_price();
-    
+    double put_price  = opt.calculate_put_price();
+
     // Greeks
     double delta = opt.calculate_delta_call();
     double gamma = opt.calculate_gamma();
-    double vega = opt.calculate_vega();
-    
+    double vega  = opt.calculate_vega();
+
     // Monte Carlo simulation
     MonteCarloSimulator mc(100.0, 105.0, 1.0, 0.05, 0.20, 100000);
-    auto call_result = mc.call_price_with_ci();
-    double mc_price = call_result.first;
-    double confidence_interval = call_result.second;
-    
+    auto [mc_price, ci] = mc.call_price_with_ci();
+
+    // Implied volatility — pass observed market price
+    double call_iv = opt.implied_volatility_call(4.5817);  // returns 0.2000
+    double put_iv  = opt.implied_volatility_put(6.9892);   // returns 0.2000
+
     return 0;
 }
 ```
@@ -230,14 +232,15 @@ int main() {
 options-pricing-engine/
 ├── src/
 │   ├── main.cpp          # User interface and program entry point
-│   ├── option.cpp        # Black-Scholes implementation
+│   ├── option.cpp        # Black-Scholes and IV solver implementation
 │   └── MonteCarlo.cpp    # Monte Carlo simulation implementation
 ├── include/
 │   ├── option.h          # Option class header
 │   └── MonteCarlo.h      # Monte Carlo simulator header
 ├── docs/
-│   ├── technical_writeup.md    # Detailed mathematical documentation
+│   └── technical_writeup.md    # Detailed mathematical documentation
 ├── bin/                  # Compiled executables (generated)
+├── build/                # Object files (generated)
 ├── .gitignore
 ├── LICENSE
 ├── Makefile
@@ -250,24 +253,19 @@ This project demonstrates:
 
 **Financial Mathematics:**
 - Options pricing theory
-- Risk-neutral valuation
 - Stochastic calculus concepts (Geometric Brownian Motion)
-- Probability distributions
+- Implied volatility and Newton-Raphson root-finding
 - Monte Carlo methods in finance
 
 **Software Engineering:**
 - Object-oriented design in C++
 - Header/implementation separation
 - Clean code principles
-- Documentation best practices
-- Multiple pricing methodologies
 
 **Numerical Computing:**
 - Mathematical function approximation
-- Floating-point precision handling
-- Random number generation
+- Iterative root-finding algorithms
 - Statistical estimation and confidence intervals
-- Performance optimization
 
 ## Technical Details
 
@@ -294,17 +292,7 @@ The Monte Carlo simulator uses:
 
 - **Black-Scholes Time Complexity**: O(1) per calculation
 - **Monte Carlo Time Complexity**: O(n) where n = number of simulations
-- **Space Complexity**: O(1) (streaming computation)
-- **Typical Runtime**: 
-  - Black-Scholes: < 1ms per calculation
-  - Monte Carlo (100k paths): ~50-100ms on modern hardware
-
-### Precision & Accuracy
-
-- All calculations use `double` precision (IEEE 754 64-bit)
-- Black-Scholes prices accurate to $0.01 or better
-- Greeks accurate to 4+ decimal places
-- Monte Carlo 95% CI typically ±$0.05 with 100k simulations
+- **IV Solver (Newton-Raphson)**: O(k) iterations< 5ms
 
 **Online Resources:**
 - [MIT OpenCourseWare - Mathematical Methods for Quantitative Finance](https://ocw.mit.edu/courses/mathematics/)
