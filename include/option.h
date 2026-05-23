@@ -4,7 +4,7 @@
 class Option {
 private:
     	double S;      // stock price
-	double K;      // strike price
+		double K;      // strike price
     	double T;      // time to maturity
     	double r;      // risk-free rate
     	double sigma;  // volatility
@@ -20,20 +20,20 @@ private:
 public:
     Option(double stock_price, double strike_price, double time_to_maturity, double risk_free_rate, double volatility); 
 	double calculate_call_price() const;
-    	double calculate_put_price() const;
+    double calculate_put_price() const;
 
-    	double calculate_delta_call() const;
-    	double calculate_delta_put() const;
+	double calculate_delta_call() const;
+   	double calculate_delta_put() const;
 
-    	double calculate_gamma() const;
+    double calculate_gamma() const;
 
-    	double calculate_theta_call() const;
-    	double calculate_theta_put() const;
+    double calculate_theta_call() const;
+    double calculate_theta_put() const;
 
 	double calculate_vega() const;
-    	double verify_put_call_parity() const;
-    	double calculate_rho_call() const;
-    	double calculate_rho_put() const;
+    double verify_put_call_parity() const;
+    double calculate_rho_call() const;
+    double calculate_rho_put() const;
 	double implied_volatility_call(double market_price, double sigma_init = 0.20);
 	double implied_volatility_put(double market_price, double sigma_init = 0.20);
 };
