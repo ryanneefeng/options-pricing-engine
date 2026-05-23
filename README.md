@@ -117,23 +117,24 @@ make
 
 ## Example Session
 ```
-$ make
-g++ -std=c++17 -Wall -Wextra -O2 -Iinclude -c src/main.cpp -o build/main.o
-g++ -std=c++17 -Wall -Wextra -O2 -Iinclude -c src/option.cpp -o build/option.o
-g++ -std=c++17 -Wall -Wextra -O2 -Iinclude -c src/MonteCarlo.cpp -o build/MonteCarlo.o
-mkdir -p bin
-g++ -std=c++17 -Wall -Wextra -O2 -Iinclude -o bin/pricer build/main.o build/option.o build/MonteCarlo.o
+mkdir -p bin build
+g++ -std=c++17 -Wall -O2 -Iinclude -c src/main.cpp -o build/main.o
+g++ -std=c++17 -Wall -O2 -Iinclude -c src/option.cpp -o build/option.o
+g++ -std=c++17 -Wall -O2 -Iinclude -c src/MonteCarlo.cpp -o build/MonteCarlo.o
+g++ -std=c++17 -Wall -O2 -Iinclude -o bin/pricer build/main.o build/option.o build/MonteCarlo.o
 
 $ ./bin/pricer
-How many options would you like to run? 1
+======================================================
+    Black-Scholes Options Pricing Engine v1.0
+======================================================
+How many options would you like to run?
+1
 Enter Stock Price (S): $100
 Enter Strike Price (K): $105
 Enter Time to Maturity (T) in years: 0.5
 Enter Risk-free Rate (r) as decimal (e.g., 0.05 for 5%): 0.05
-Enter Volatility (sigma) as decimal (e.g., 0.20 for 20%): 0.20
-Call market price: 4.5817
-Put market price: 6.9892
-
+Enter Volatility (sigma) as decimal (e.g., 0.20 for 20%): 0.2
+Calculating...
 ======================================================
                  CALL OPTION
 ======================================================
@@ -143,7 +144,6 @@ Gamma:   0.0281
 Theta:   -7.6919
 Vega:    28.0757
 Rho:     20.7672
-
 ======================================================
                      PUT OPTION
 ======================================================
@@ -153,30 +153,26 @@ Gamma:   0.0281
 Theta:   -2.5715
 Vega:    28.0757
 Rho:     -30.4366
-
 ======================================================
-           MONTE CARLO SIMULATION
+                MONTE CARLO SIMULATION
 ======================================================
 CALL OPTION (100,000 simulations)
-Monte Carlo Price: $4.5771 ± $0.0505
-95% CI: [$4.5266, $4.6276]
+Monte Carlo Price: $4.5992 ┬▒ $0.0508
+95% CI: [$4.5484, $4.6499]
 Black-Scholes Price: $4.5817
-Difference: $-0.0046
-
+Difference: $0.0175
 PUT OPTION (100,000 simulations)
-Monte Carlo Price: $7.0078 ± $0.0523
-95% CI: [$6.9555, $7.0602]
+Monte Carlo Price: $7.0228 ┬▒ $0.0523
+95% CI: [$6.9705, $7.0752]
 Black-Scholes Price: $6.9892
-Difference: $0.0186
-
+Difference: $0.0336
 ======================================================
-                     VALIDATION
+                      VALIDATION
 ======================================================
-Put-Call Parity Error: 7.11e-15
+Put-Call Parity Error: -7.11e-15
 Calculations verified!
-
 ======================================================
-                   GREEK SUMMARY
+                    GREEK SUMMARY
 ======================================================
           CALL          PUT
 ------------------------------------------------------
@@ -186,6 +182,15 @@ Theta:    -7.6919       -2.5715
 Vega:     28.0757       28.0757
 Rho:      20.7672       -30.4366
 ======================================================
+======================================================
+              IMPLIED VOLATILITY SOLVER
+======================================================
+Enter observed market price for call (0 to skip): $4.5817
+Call Implied Volatility: 20.0001%
+Enter observed market price for put (0 to skip): $6.9892
+Put Implied Volatility: 19.9999%
+======================================================
+
 ```
 
 ## Programmatic Usage
