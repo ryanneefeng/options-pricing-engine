@@ -6,6 +6,7 @@
 // Mathematical constants
 const double PI = 3.14159265358979323846;
 const double SQRT_2PI = 2.506628274631000502;
+const double M_SQRT1_2 = 0.7071067811865476;
 
 /**
  * Constructor: Initializes option with given parameters
@@ -213,3 +214,50 @@ double Option::verify_put_call_parity() const {
 	return parity_lhs - parity_rhs;
 }
 
+double Option::implied_volatility_call(double market_price, double sigma_init) {
+	double sigma = sigma_init;
+	const int MAX_ITER = 100;
+	const double TOLERANCE = 1e-6;
+
+	for (int i = 0; i < MAX_ITER; i++){
+		double sigma_old = this->sigma;
+		this->sigma = sigma;
+		double price = calculate_call_price();
+		double diff = price - market_price;
+		double vega = calculate_vega();
+		this->sigma = sigma_old;
+		if (std::abs(vega) < 1e-10) {
+			throw std::runtime_error("IV solver failed. Vega is too small");
+		}
+		sigma = sigma - diff / vega;
+		if (sigma <= 0) sigma = 1e-6;
+		if (std::abs(diff) < TOLERANCE) {
+			return sigma;
+		}
+	}
+	throw std::runtime_error("IV solver did not converge");
+}
+
+double Option::implied_volatility_put(double market_price, double sigma_init){
+	double sigma = sigma_init;
+	const int MAX_ITER = 100;
+	const double TOLERANCE = 1e-6;
+	
+	for(int i = 0; i < MAX_ITER; i++){
+		double sigma_old = this->sigma;
+		this->sigma = sigma;
+		double price = calculate_put_price();
+		double diff = price - market_price;
+		double vega = calculate_vega();
+		this->sigma = sigma_old;
+		if (std::abs(vega) < 1e-10){
+			throw std::runtime_error("IV solver failed: vega too small");
+		}
+		sigma = sigma - diff / vega;
+		if (sigma <= 0) sigma = 1e-6;
+		if (std::abs(diff) < TOLERANCE) {
+			return sigma;
+		}
+	}
+	throw std::runtime_error("IV solver did not converge");
+}

@@ -117,7 +117,7 @@ int main() {
 			cout << endl;
 
 			cout << "======================================================" << endl;
-        		cout << "                     VALIDATION                      " << endl;
+        		cout << "                      VALIDATION                      " << endl;
 			cout << "======================================================" << endl;
 	        	double parity_error = option.verify_put_call_parity();
 	       		cout << "Put-Call Parity Error: " << scientific << setprecision(2) << parity_error << endl;
@@ -130,7 +130,7 @@ int main() {
 	
 	       		// Greek Summary Table
 			cout << "======================================================" << endl;
-			cout << "                   GREEK SUMMARY                     " << endl;
+			cout << "                    GREEK SUMMARY                     " << endl;
 			cout << "======================================================" << endl;
 			cout << left << setw(10) << ""
 	    		     << setw(14) << "CALL"
@@ -152,6 +152,41 @@ int main() {
 			cout << setw(10) << "Rho:"
 			     << setw(14) << option.calculate_rho_call()
 			     << setw(14) << option.calculate_rho_put() << endl;
+			cout << "======================================================" << endl;
+		
+			// Implied Volatility Section
+			cout << "======================================================" << endl;
+                        cout << "              IMPLIED VOLATILITY SOLVER               " << endl;
+                        cout << "======================================================" << endl;
+			cout << "Enter observed market price for call (0 to skip): $";
+			double call_market_price;
+			cin >> call_market_price;
+
+			if (call_market_price > 0) {
+				try {
+					double call_iv = option.implied_volatility_call(call_market_price);
+					cout << fixed << setprecision(4);
+					cout << "Call Implied Volatility: " << call_iv * 100 << "%" << endl;
+				}
+				catch (const exception& e) {
+					cout << "Call IV: " << e.what() << endl;
+				}
+			}
+			
+			cout << "Enter observed market price for put (0 to skip): $";
+			double put_market_price;
+			cin >> put_market_price;
+
+			if (put_market_price > 0) {
+				try {
+					double put_iv = option.implied_volatility_put(put_market_price);
+					cout << fixed << setprecision(4);
+					cout << "Put Implied Volatility: " << put_iv * 100 << "%" << endl;
+				}
+				catch (const exception& e) {
+					cout << "Put IV: " << e.what() << endl;
+				}
+			}
 			cout << "======================================================" << endl;
 		}
 		catch (const exception& e) {

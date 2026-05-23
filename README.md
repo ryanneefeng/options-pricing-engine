@@ -131,6 +131,8 @@ Enter Strike Price (K): $105
 Enter Time to Maturity (T) in years: 0.5
 Enter Risk-free Rate (r) as decimal (e.g., 0.05 for 5%): 0.05
 Enter Volatility (sigma) as decimal (e.g., 0.20 for 20%): 0.20
+Call market price: 4.5817
+Put market price: 6.9892
 
 ======================================================
                  CALL OPTION
