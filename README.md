@@ -116,15 +116,14 @@ make
 ```
 
 ## Example Session
-```
-$ make
-g++ -std=c++17 -Wall -Wextra -O2 -Iinclude -c src/main.cpp -o build/main.o
-g++ -std=c++17 -Wall -Wextra -O2 -Iinclude -c src/option.cpp -o build/option.o
-g++ -std=c++17 -Wall -Wextra -O2 -Iinclude -c src/MonteCarlo.cpp -o build/MonteCarlo.o
-mkdir -p bin
-g++ -std=c++17 -Wall -Wextra -O2 -Iinclude -o bin/pricer build/main.o build/option.o build/MonteCarlo.o
 
-$ ./bin/pricer
+```
+g++ -std=c++17 -Wall -O2 -Iinclude -c src/main.cpp -o build/main.o
+g++ -std=c++17 -Wall -O2 -Iinclude -c src/option.cpp -o build/option.o
+g++ -std=c++17 -Wall -O2 -Iinclude -c src/MonteCarlo.cpp -o build/MonteCarlo.o
+g++ -std=c++17 -Wall -O2 -Iinclude -o bin/pricer build/main.o build/option.o build/MonteCarlo.o
+./bin/pricer
+
 ======================================================
     Black-Scholes Options Pricing Engine v1.0
 ======================================================
@@ -145,6 +144,7 @@ Gamma:   0.0281
 Theta:   -7.6919
 Vega:    28.0757
 Rho:     20.7672
+
 ======================================================
                      PUT OPTION
 ======================================================
@@ -154,19 +154,22 @@ Gamma:   0.0281
 Theta:   -2.5715
 Vega:    28.0757
 Rho:     -30.4366
+
 ======================================================
                 MONTE CARLO SIMULATION
 ======================================================
 CALL OPTION (100,000 simulations)
-Monte Carlo Price: $4.5992 ± $0.0508
-95% CI: [$4.5484, $4.6499]
+Monte Carlo Price: $4.6076 ± $0.0298
+95% CI: [$4.5778, $4.6373]
 Black-Scholes Price: $4.5817
-Difference: $0.0175
+Difference: $0.0259
+
 PUT OPTION (100,000 simulations)
-Monte Carlo Price: $7.0228 ± $0.0523
-95% CI: [$6.9705, $7.0752]
+Monte Carlo Price: $6.9873 ± $0.0214
+95% CI: [$6.9660, $7.0087]
 Black-Scholes Price: $6.9892
-Difference: $0.0336
+Difference: $-0.0019
+
 ======================================================
                       VALIDATION
 ======================================================
