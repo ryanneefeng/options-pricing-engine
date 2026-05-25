@@ -9,7 +9,7 @@ private:
     	double r;      // risk-free rate
     	double sigma;  // volatility
 
-    	bool validate_inputs() const;
+    	void validate_inputs() const;
 
     	double d1() const;
     	double d2() const;
