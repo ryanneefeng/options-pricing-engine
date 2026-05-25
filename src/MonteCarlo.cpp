@@ -40,10 +40,18 @@ double MonteCarloSimulator::price_call_mc() {
 std::pair <double, double> MonteCarloSimulator::call_price_with_ci() {
 	double sum_payoff = 0.0;
 	double sum_payoff_sq = 0.0;
-
+	//Draw 1 random Z from N(0,1)
+        static thread_local std::mt19937 gen(std::random_device{}());
+        std::normal_distribution<> normal(0.0, 1.0);
 	for (int i = 0; i < num_simulations; i++) {
-		double ST = simulate_stock_path();
-		double payoff = std::max(ST - K, 0.0);
+		double Z = normal(gen);
+		//Simulate stock price with (+)Z
+		double ST1 = S * std::exp((r - 0.5*sigma*sigma)*T + sigma*std::sqrt(T)*Z);
+		//Simulate stock price with (-)Z
+		double ST2 = S * std::exp((r - 0.5*sigma*sigma)*T + sigma*std::sqrt(T)*(-Z));
+		//Average of the two payoffs (variance reduction)
+		double payoff = 0.5 * (std::max(ST1 - K, 0.0) + std::max(ST2 - K, 0.0));
+
 		sum_payoff += payoff;
 		sum_payoff_sq += payoff * payoff;
 	}
@@ -62,14 +70,21 @@ std::pair <double, double> MonteCarloSimulator::call_price_with_ci() {
 std::pair<double, double> MonteCarloSimulator::put_price_with_ci() {
     	double sum_payoff = 0.0;
     	double sum_payoff_sq = 0.0;
+	//Draw 1 random Z from N(0,1)
+        static thread_local std::mt19937 gen(std::random_device{}());
+        std::normal_distribution<> normal(0.0, 1.0);
+        for (int i = 0; i < num_simulations; i++) {
+                double Z = normal(gen);
+                //Simulate stock price with (+)Z
+                double ST1 = S * std::exp((r - 0.5*sigma*sigma)*T + sigma*std::sqrt(T)*Z);
+                //Simulate stock price with (-)Z
+                double ST2 = S * std::exp((r - 0.5*sigma*sigma)*T + sigma*std::sqrt(T)*(-Z));
+                //Average of the two payoffs (variance reduction)
+                double payoff = 0.5 * (std::max(K - ST1, 0.0) + std::max(K - ST2, 0.0));
 
-    	for (int i = 0; i < num_simulations; ++i) {
-        	double ST = simulate_stock_path();
-        	double payoff = std::max(K - ST, 0.0);
-        	sum_payoff += payoff;
-        	sum_payoff_sq += payoff * payoff;
-    	}
-
+                sum_payoff += payoff;
+                sum_payoff_sq += payoff * payoff;
+        }
     	double n = static_cast<double>(num_simulations);
     	double avg = sum_payoff / n;
     	double variance = (sum_payoff_sq / n) - (avg * avg);

@@ -16,40 +16,21 @@ Option::Option(double stock_price, double strike_price, double time_to_maturity,
     	: S(stock_price), K(strike_price), T(time_to_maturity),
       	r(risk_free_rate), sigma(volatility) {
 
-    if (!validate_inputs()) {
-	throw std::invalid_argument("Invalid option parameters");
-    }
+    validate_inputs();
 }
 
 /**
  * Validate all input parameters
  */
-bool Option::validate_inputs() const {
-	if (S <= 0) {
-       		throw std::invalid_argument("Stock price must be a positive number");
-		return 0;
-    	}
-    	if (K <= 0) {
-        	throw std::invalid_argument("Strike price must be a positive number");
-    		return 0;
-	}
-    	if (T < 0) {
-        	throw std::invalid_argument("Time to maturity must be a positive number");
-		return 0;
-   	}
-   	if (T == 0) {
-        	throw std::invalid_argument("Time to maturity cannot be zero (option expired)");
-		return 0;
-    	}
-    	if (sigma < 0) {
-        	throw std::invalid_argument("Volatility must be a positive number");
-    		return 0;
-	}
-    	if (sigma == 0) {
-        	throw std::invalid_argument("Volatility cannot be zero");
-    		return 0;
-	}
-    	return true;
+void Option::validate_inputs() const {
+    if (S <= 0)
+        throw std::invalid_argument("Stock price must be positive");
+    if (K <= 0)
+        throw std::invalid_argument("Strike price must be positive");
+    if (T <= 0)
+        throw std::invalid_argument("Time to maturity must be positive and non-zero");
+    if (sigma <= 0)
+        throw std::invalid_argument("Volatility must be positive and non-zero");
 }
 
 /**
@@ -220,12 +201,11 @@ double Option::implied_volatility_call(double market_price, double sigma_init) {
 	const double TOLERANCE = 1e-6;
 
 	for (int i = 0; i < MAX_ITER; i++){
-		double sigma_old = this->sigma;
-		this->sigma = sigma;
-		double price = calculate_call_price();
+		Option trial(S, K, T, r, sigma);
+		double price = trial.calculate_call_price();
 		double diff = price - market_price;
-		double vega = calculate_vega();
-		this->sigma = sigma_old;
+		double vega = trial.calculate_vega();
+		
 		if (std::abs(vega) < 1e-10) {
 			throw std::runtime_error("IV solver failed. Vega is too small");
 		}
@@ -244,12 +224,11 @@ double Option::implied_volatility_put(double market_price, double sigma_init){
 	const double TOLERANCE = 1e-6;
 	
 	for(int i = 0; i < MAX_ITER; i++){
-		double sigma_old = this->sigma;
-		this->sigma = sigma;
-		double price = calculate_put_price();
+		Option trial(S, K, T, r, sigma);
+		double price = trial.calculate_put_price();
 		double diff = price - market_price;
-		double vega = calculate_vega();
-		this->sigma = sigma_old;
+		double vega = trial.calculate_vega();
+		
 		if (std::abs(vega) < 1e-10){
 			throw std::runtime_error("IV solver failed: vega too small");
 		}
