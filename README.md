@@ -246,6 +246,8 @@ options-pricing-engine/
 ├── build/                # Object files (generated)
 ├── .gitignore
 ├── LICENSE
+├── CONTRIBUTING.md
+├── CODE_OF_CONDUCT.md
 ├── Makefile
 └── README.md
 ```
