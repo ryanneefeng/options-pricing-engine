@@ -91,7 +91,7 @@ int main() {
 	            	cout << "        	MONTE CARLO SIMULATION          " << endl;
 	            	cout << "======================================================" << endl;
 	
-			MonteCarloSimulator mc(S, K, T, r, sigma, 100000);
+			MonteCarloSimulator mc(S, K, T, r, sigma, 100000, option);
 
 			// Call option via Monte Carlo
 			auto call_mc = mc.call_price_with_ci();
@@ -114,6 +114,30 @@ int main() {
 			cout << "95% CI: [$" << put_mc_price - put_mc_ci << ", $" << put_mc_price + put_mc_ci << "]" << endl;
 			cout << "Black-Scholes Price: $" << option.calculate_put_price() << endl;
 			cout << "Difference: $" << put_mc_price - option.calculate_put_price() << endl;
+			cout << endl;
+
+			// Control Variates Section
+			cout << "======================================================" << endl;
+			cout << "           MONTE CARLO (CONTROL VARIATES)            " << endl;
+			cout << "======================================================" << endl;
+			
+			auto call_cv = mc.call_price_with_cv();
+			double call_cv_price = call_cv.first;
+			double call_cv_ci = call_cv.second;
+
+			cout << "CALL OPTION (100,000 simulations)" << endl;
+			cout << "Control Variate Price: $" << fixed << setprecision(4) << call_cv_price << " +/- $" << call_cv_ci << endl;
+			cout << "95% CI: [$" << call_cv_price - call_cv_ci << ", $" << call_cv_price + call_cv_ci << "]" << endl;
+			cout << "Black-Scholes Price:   $" << option.calculate_call_price() << endl;
+
+			auto put_cv = mc.put_price_with_cv();
+			double put_cv_price = put_cv.first;
+			double put_cv_ci = put_cv.second;
+
+			cout << "\nPUT OPTION (100,000 simulations)" << endl;
+			cout << "Control Variate Price: $" << fixed << setprecision(4) << put_cv_price << " +/- $" << put_cv_ci << endl;
+			cout << "95% CI: [$" << put_cv_price - put_cv_ci << ", $" << put_cv_price + put_cv_ci << "]" << endl;
+			cout << "Black-Scholes Price:   $" << option.calculate_put_price() << endl;
 			cout << endl;
 
 			cout << "======================================================" << endl;
