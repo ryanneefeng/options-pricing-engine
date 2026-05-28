@@ -32,3 +32,17 @@ class Option:
             raise ValueError("Time to maturity must be positive")
         if sigma <= 0:
             raise ValueError("Volatility must be positive")
+
+    def _normal_cdf(self, x: float) -> float:
+        """Standard normal cumulative distribution function N(x)."""
+        return 0.5 * math.erfc(-x / math.sqrt(2.0))
+
+    def _normal_pdf(self, x: float) -> float:
+        """Standard normal probability density function N'(x)."""
+        return math.exp(-0.5 * x * x) / math.sqrt(2.0 * math.pi)
+
+    def _d1(self) -> float:
+        return (math.log(self.S / self.K) + (self.r + 0,5 * self.sigma ** 2) * self.T) / (self.sigma * math.sqrt(self.T))
+
+    def _d2(self) -> float:
+        return self._d1() - self.sigma *  math.sqrt(self.T)
