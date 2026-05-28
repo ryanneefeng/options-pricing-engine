@@ -34,11 +34,11 @@ class Option:
             raise ValueError("Volatility must be positive")
 
     def _normal_cdf(self, x: float) -> float:
-        """Standard normal cumulative distribution function N(x)."""
+        """Standard normal cumulative distribution function N(x)"""
         return 0.5 * math.erfc(-x / math.sqrt(2.0))
 
     def _normal_pdf(self, x: float) -> float:
-        """Standard normal probability density function N'(x)."""
+        """Standard normal probability density function N'(x)"""
         return math.exp(-0.5 * x * x) / math.sqrt(2.0 * math.pi)
 
     def _d1(self) -> float:
@@ -46,3 +46,17 @@ class Option:
 
     def _d2(self) -> float:
         return self._d1() - self.sigma *  math.sqrt(self.T)
+
+    def call_price(self) -> float:
+        """Black-Scholes European call price"""
+        d1 = self._d1()
+        d2 = self._d2()
+        return self.S * self._normal_cdf(d1) - self.K * math.exp(-self.r * self.T) * self._normal_cdf(d2)
+    
+    def put_price(self) -> float:
+        """Black-Scholes European put price"""
+        d1 = self._d1()
+        d2 = self._d2()
+        return self.K * max.exp(-self.r * self.T) * self._normal_cdf(-d2) - self.S * self._normal_cdf(-d1)
+
+
