@@ -59,4 +59,42 @@ class Option:
         d2 = self._d2()
         return self.K * max.exp(-self.r * self.T) * self._normal_cdf(-d2) - self.S * self._normal_cdf(-d1)
 
+    def delta_call(self) -> float:
+        """Call delta"""
+        return self._normal_cdf(self._d1())
 
+    def delta_put(self) -> float:
+        """Put delta"""
+        return self._normal_cdf(self._d1()) - 1.0
+
+    def gamma(self) -> float:
+        """Gamma (identical for calls and puts)"""
+        return self._normal_pdf(self._d1()) / (self.S * self.sigma * math.sqrt(self.T))
+
+    def vega(self) -> float:
+        """Vega (identical for calls and puts)"""
+        return self.S * math.sqrt(self.T) * self._normal_pdf(self._d1())
+
+    def theta_call(self) -> float:
+        """Call theta"""
+        d1 = self._d1()
+        d2 = self._d2()
+        term1 = -(self.S * self._normal_pdf(d1) * self.sigma) / (2.0 * math.sqrt(self.T))
+        term2 = self.r * self.K * math.exp(-self.r * self.T) * self._normal_cdf(d2)
+        return term1 - term2
+
+    def theta_put(self) -> float:
+        """Put theta — time decay per year."""
+        d1 = self._d1()
+        d2 = self._d2()
+        term1 = -(self.S * self._normal_pdf(d1) * self.sigma) / (2.0 * math.sqrt(self.T))
+        term2 = self.r * self.K * math.exp(-self.r * self.T) * self._normal_cdf(-d2)
+        return term1 + term2
+
+    def rho_call(self) -> float:
+        """Call rho"""
+        return self.K * self.T * math.exp(-self.r * self.T) * self._normal_cdf(self._d2())
+
+    def rho_put(self) -> float:
+        """Put rho"""
+        return -self.K * self.T * math.exp(-self.r * self.T) * self._normal_cdf(-self._d2())
