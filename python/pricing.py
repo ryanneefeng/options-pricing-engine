@@ -1,6 +1,7 @@
 #pricing.py - Python implementation mirroring the C++ Option class
     
 import math
+import numpy as np
 
 class Option:
     """
@@ -15,7 +16,7 @@ class Option:
     sigma : float - volatility (decimal, e.g. 0.20 = 20%)
     
     """
-    def __init__(self, S: float, K: float, r: float, sigma: float):
+    def __init__(self, S: float, K: float, T: float, r: float, sigma: float):
         self._validate(S, K, T, sigma)
         self.S = S
         self.K = K
@@ -42,7 +43,7 @@ class Option:
         return math.exp(-0.5 * x * x) / math.sqrt(2.0 * math.pi)
 
     def _d1(self) -> float:
-        return (math.log(self.S / self.K) + (self.r + 0,5 * self.sigma ** 2) * self.T) / (self.sigma * math.sqrt(self.T))
+        return (math.log(self.S / self.K) + (self.r + 0.5 * self.sigma ** 2) * self.T) / (self.sigma * math.sqrt(self.T))
 
     def _d2(self) -> float:
         return self._d1() - self.sigma *  math.sqrt(self.T)
@@ -57,7 +58,7 @@ class Option:
         """Black-Scholes European put price"""
         d1 = self._d1()
         d2 = self._d2()
-        return self.K * max.exp(-self.r * self.T) * self._normal_cdf(-d2) - self.S * self._normal_cdf(-d1)
+        return self.K * math.exp(-self.r * self.T) * self._normal_cdf(-d2) - self.S * self._normal_cdf(-d1)
 
     def delta_call(self) -> float:
         """Call delta"""
@@ -152,9 +153,8 @@ class Option:
         """
         Monte Carlo call price with antithetic variates
         Returns (price, confidence_interval)
+        
         """
-        import numpy as np
-
         Z = np.random.standard_normal(num_sims)
 
         # Antithetic paths — +Z and -Z
@@ -175,9 +175,8 @@ class Option:
         """
         Monte Carlo put price with antithetic variates
         Returns (price, confidence_interval)
+        
         """
-        import numpy as np
-
         Z = np.random.standard_normal(num_sims)
 
         ST1 = self.S * np.exp((self.r - 0.5 * self.sigma**2) * self.T + self.sigma * math.sqrt(self.T) * Z)
