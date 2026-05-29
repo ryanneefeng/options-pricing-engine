@@ -1,4 +1,4 @@
-#include "../include/Option.h"
+#include "../include/option.h"
 #include <cmath>
 #include <stdexcept>
 #include <algorithm>
