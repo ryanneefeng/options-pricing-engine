@@ -1,6 +1,6 @@
 #include <iostream>
 #include <iomanip>
-#include "../include/Option.h"
+#include "../include/option.h"
 #include <limits>
 #include "../include/MonteCarlo.h"
 
