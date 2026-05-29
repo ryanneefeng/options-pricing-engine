@@ -147,3 +147,46 @@ class Option:
                 return sigma
 
         raise ValueError("IV solver did not converge")
+
+    def monte_carlo_call(self, num_sims: int = 100000) -> tuple:
+        """
+        Monte Carlo call price with antithetic variates
+        Returns (price, confidence_interval)
+        """
+        import numpy as np
+
+        Z = np.random.standard_normal(num_sims)
+
+        # Antithetic paths — +Z and -Z
+        ST1 = self.S * np.exp((self.r - 0.5 * self.sigma**2) * self.T + self.sigma * math.sqrt(self.T) * Z)
+        ST2 = self.S * np.exp((self.r - 0.5 * self.sigma**2) * self.T + self.sigma * math.sqrt(self.T) * (-Z))
+
+        # Average antithetic payoffs
+        payoffs = 0.5 * (np.maximum(ST1 - self.K, 0) + np.maximum(ST2 - self.K, 0))
+
+        # Discount
+        price = np.mean(payoffs) * math.exp(-self.r * self.T)
+        std_error = np.std(payoffs) / math.sqrt(num_sims)
+        ci = 1.96 * std_error * math.exp(-self.r * self.T)
+
+        return (price, ci)
+
+    def monte_carlo_put(self, num_sims: int = 100000) -> tuple:
+        """
+        Monte Carlo put price with antithetic variates
+        Returns (price, confidence_interval)
+        """
+        import numpy as np
+
+        Z = np.random.standard_normal(num_sims)
+
+        ST1 = self.S * np.exp((self.r - 0.5 * self.sigma**2) * self.T + self.sigma * math.sqrt(self.T) * Z)
+        ST2 = self.S * np.exp((self.r - 0.5 * self.sigma**2) * self.T + self.sigma * math.sqrt(self.T) * (-Z))
+
+        payoffs = 0.5 * (np.maximum(self.K - ST1, 0) + np.maximum(self.K - ST2, 0))
+
+        price = np.mean(payoffs) * math.exp(-self.r * self.T)
+        std_error = np.std(payoffs) / math.sqrt(num_sims)
+        ci = 1.96 * std_error * math.exp(-self.r * self.T)
+
+        return (price, ci)
