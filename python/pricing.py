@@ -98,3 +98,52 @@ class Option:
     def rho_put(self) -> float:
         """Put rho"""
         return -self.K * self.T * math.exp(-self.r * self.T) * self._normal_cdf(-self._d2())
+
+    def implied_volatility_call(self, market_price: float, sigma_init: float = 0.20) -> float:
+        """Newton-Raphson implied volatility solver for calls."""
+        sigma  = sigma_init
+        MAX_ITER = 100
+        TOLERANCE = 1e-6
+
+        for i in range(MAX_ITER):
+            trial = Option(self.S, self.K, self.T, self.r, sigma)
+            price = trial.call_price()
+            diff = price - market_price
+            v = trial.vega
+
+            if abs(v) < 1e-10:
+                raise ValueError("IV solver failed: vega too small")
+
+            sigma = sigma - diff / v
+            if sigma <= 0:
+                sigma = 1e-6
+
+            if abs(diff) < TOLERANCE:
+                return sigma
+
+        raise ValueError("IV solver did not converge")
+    
+    def implied_volatility_put(self, market_price: float, sigma_init: float = 0.20) -> float:
+        """Newton-Raphson implied volatility solver for puts"""
+        sigma  = sigma_init
+        MAX_ITER = 100
+        TOLERANCE = 1e-6
+
+        for i in range(MAX_ITER):
+            trial = Option(self.S, self.K, self.T, self.r, sigma)
+            price = trial.put_price()
+            diff = price - market_price
+            v = trial.vega()
+
+            if abs(v) < 1e-10:
+                raise ValueError("IV solver failed: vega too small")
+
+            sigma = sigma - diff / v
+
+            if sigma <= 0:
+                sigma = 1e-6
+
+            if abs(diff) < TOLERANCE:
+                return sigma
+
+        raise ValueError("IV solver did not converge")
