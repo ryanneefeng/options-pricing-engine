@@ -2,9 +2,10 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![C++](https://img.shields.io/badge/C++-17-blue.svg)](https://isocpp.org/)
+[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org/)
 [![Status](https://img.shields.io/badge/Status-Active-success.svg)]()
 
-A C++ implementation of the Black-Scholes-Merton model for pricing European options with complete Greeks calculations, Monte Carlo simulation validation, and implied volatility solving via Newton-Raphson.
+A quantitative options pricing engine implemented in both C++ and Python. Features analytical Black-Scholes pricing, complete Greeks, Monte Carlo simulation with variance reduction, implied volatility solving via Newton-Raphson, and a Python backtesting interface that prices live options strips using real market data.
 
 ## Features
 
@@ -12,27 +13,20 @@ A C++ implementation of the Black-Scholes-Merton model for pricing European opti
   - Analytical Black-Scholes formula
   - Monte Carlo simulation with 100,000 paths
   - 95% confidence intervals for MC estimates
+  - Antithetic variates and control variates variance reduction
 - **Complete Greeks Suite** (Delta, Gamma, Theta, Vega, Rho)
 - **Implied Volatility Solver (Newton-Raphson method)**
 - **Model Validation**
   - Put-call parity verification
   - Black-Scholes vs Monte Carlo comparison
-- **Clean Architecture**
 - **Multi-option batch processing**
-- **Professional user interface**
 
-**Documentation:**
-- Comprehensive README with mathematical background
-- Inline code documentation
-- Technical writeup (in progress - 60% complete)
-
-**Planned Enhancements:**
-- American options pricing (binomial tree)
-- Dividend-paying stocks support
-- Historical volatility calculator
-- Variance reduction techniques for Monte Carlo
-- Python interface for backtesting
-
+**Python Interface (python/):**
+- Pure Python Option class mirroring the C++ implementation
+- Historical volatility calculation from real market data via yfinance
+- Options strip pricing across multiple strikes and maturities
+- Live backtesting demo using real stock prices
+  
 ## Mathematical Background
 
 The Black-Scholes model provides analytical solutions for European option pricing under the following assumptions:
@@ -89,11 +83,21 @@ Price = e^(-rT) * E[max(K - S(T), 0)]  // Put
 ```
 CI = 1.96 * (standard_deviation / √n)
 ```
+**Variance Reduction — Antithetic Variates:**
 
-The Monte Carlo method provides:
-- Independent validation of Black-Scholes prices
-- Flexibility for complex payoffs and exotic options
-- Visual understanding of price uncertainty
+For each draw Z, also simulate –Z. The two negatively correlated payoffs are averaged, reducing estimator variance by ~40–60% with no additional computational cost.
+
+**Variance Reduction — Control Variates:**
+
+Uses the simulated stock price as a control variable. Since E[S(T)] = S·e^(rT) is known exactly under the risk-neutral measure, deviations from this expectation correct the payoff estimate.
+
+**Implied Volatility (Newton-Raphson)**
+
+Black-Scholes has no closed-form inverse for σ. Given an observed market price, implied volatility is found via:
+```
+σ_new = σ_old - (BS_price(σ_old) - market_price) / Vega(σ_old)
+```
+Converges to tolerance 1e-6 in typically 4–6 iterations from σ₀ = 0.20.
 
 ### Greeks
 
@@ -108,6 +112,8 @@ The Monte Carlo method provides:
 *Note: N'(x) = (1/√2π)e^(-x²/2) is the standard normal probability density function*
 
 ## Installation
+
+**C++ Engine**
 ```bash
 git clone https://github.com/ryaneefeng/options-pricing-engine.git
 cd options-pricing-engine
@@ -115,7 +121,14 @@ make
 ./bin/pricer
 ```
 
-## Example Session
+**Python Interface**
+```bash
+pip install numpy pandas yfinance
+cd python
+python backtest.py
+```
+
+## C++ Example Session
 
 ```
 g++ -std=c++17 -Wall -O2 -Iinclude -c src/main.cpp -o build/main.o
@@ -196,8 +209,33 @@ Put Implied Volatility: 19.9999%
 ======================================================
 
 ```
+## Python Example Session
+
+```
+$ python backtest.py
+
+Fetching data for AAPL...
+Current Price:         $312.06
+Historical Volatility:  22.00%
+Time to Expiry:         30 days (0.0822 years)
+
+Options Strip — 30-Day European Options (AAPL)
+===========================================================================
+ Strike  Moneyness  Call Price  Put Price  Call Delta  Put Delta  IV (Call)
+ 265.25     1.1765     47.9200     0.0232      0.9962    -0.0038      22.00
+ 280.85     1.1111     32.6699     0.3120      0.9614    -0.0386      22.00
+ 296.46     1.0526     18.8178     1.9990      0.8186    -0.1814      22.00
+ 312.06     1.0000      8.4906     7.2108      0.5385    -0.4615      22.00
+ 327.66     0.9524      2.8337    17.0929      0.2492    -0.7508      22.00
+ 343.27     0.9091      0.6816    30.4798      0.0786    -0.9214      22.00
+ 358.87     0.8696      0.1182    45.4554      0.0170    -0.9830      22.00
+===========================================================================
+```
 
 ## Programmatic Usage
+
+**C++**
+
 ```cpp
 #include "include/option.h"
 #include "include/MonteCarlo.h"
@@ -230,6 +268,29 @@ int main() {
 }
 ```
 
+**Python**
+
+```python
+from pricing import Option
+
+opt = Option(S=100, K=105, T=0.5, r=0.05, sigma=0.20)
+
+# Pricing
+print(opt.call_price())    # 4.5817
+print(opt.put_price())     # 6.9892
+
+# Greeks
+print(opt.delta_call())    # 0.4612
+print(opt.vega())          # 28.0757
+
+# Implied volatility
+print(opt.implied_volatility_call(4.5817))  # 0.2000
+
+# Monte Carlo
+price, ci = opt.monte_carlo_call()
+print(f"${price:.4f} ± ${ci:.4f}")
+```
+
 ## Project Structure
 ```
 options-pricing-engine/
@@ -242,6 +303,9 @@ options-pricing-engine/
 │   └── MonteCarlo.h      # Monte Carlo simulator header
 ├── docs/
 │   └── technical_writeup.md    # Detailed mathematical documentation
+├── python/
+│   ├── pricing.py        # Python Option class — BS pricing, Greeks, IV, MC
+│   └── backtest.py       # Live backtesting demo using yfinance
 ├── bin/                  # Compiled executables (generated)
 ├── build/                # Object files (generated)
 ├── .gitignore
@@ -263,7 +327,7 @@ This project demonstrates:
 - Monte Carlo methods in finance
 
 **Software Engineering:**
-- Object-oriented design in C++
+- Object-oriented design in C++ and Python
 - Header/implementation separation
 - Clean code principles
 
@@ -285,19 +349,12 @@ double normal_cdf(double x) {
 
 This provides accuracy to 6+ decimal places, sufficient for financial calculations.
 
-### Monte Carlo Implementation
-
-The Monte Carlo simulator uses:
-- **Random Number Generation**: C++11 `<random>` library with Mersenne Twister (mt19937)
-- **Normal Distribution**: Box-Muller transform via `std::normal_distribution`
-- **Geometric Brownian Motion**: Exact solution for stock price paths
-- **Variance Estimation**: Sample standard deviation for confidence intervals
-
 ### Performance Characteristics
 
 - **Black-Scholes Time Complexity**: O(1) per calculation
 - **Monte Carlo Time Complexity**: O(n) where n = number of simulations
 - **IV Solver (Newton-Raphson)**: O(k) iterations< 5ms
+- **Options strip 7 strikes (Python)**: O(7k)< 1s
 
 **Online Resources:**
 - [MIT OpenCourseWare - Mathematical Methods for Quantitative Finance](https://ocw.mit.edu/courses/mathematics/)
@@ -315,5 +372,4 @@ Cornell University CAS | B.A Mathematics - Minor: Computer Science, Statistics |
 - GitHub: [@ryanneefeng](https://github.com/ryanneefeng)
 
 ## License
-
 This project is licensed under the MIT License - see the LICENSE file for details.
