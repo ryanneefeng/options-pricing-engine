@@ -110,7 +110,7 @@ class Option:
             trial = Option(self.S, self.K, self.T, self.r, sigma)
             price = trial.call_price()
             diff = price - market_price
-            v = trial.vega
+            v = trial.vega()
 
             if abs(v) < 1e-10:
                 raise ValueError("IV solver failed: vega too small")
