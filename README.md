@@ -363,13 +363,11 @@ This provides accuracy to 6+ decimal places, sufficient for financial calculatio
 
 ## Author
 
-**Ryan Feng**  
-Cornell University CAS | B.A Mathematics - Minor: Computer Science, Statistics | Class of 2029  
+Ryan Feng Cornell University | B.A. Mathematics, Minor: Computer Science | Class of 2029
 
-**Connect:**
-- LinkedIn: [linkedin.com/in/ryanneefeng](https://linkedin.com/in/ryanneefeng)
+- LinkedIn: linkedin.com/in/ryanneefeng
 - Email: ryanneefeng@gmail.com
-- GitHub: [@ryanneefeng](https://github.com/ryanneefeng)
-
+- GitHub: @ryanneefeng
+  
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.
