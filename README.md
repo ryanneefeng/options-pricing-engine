@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![C++](https://img.shields.io/badge/C++-17-blue.svg)](https://isocpp.org/)
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org/)
-[![Status](https://img.shields.io/badge/Status-Active-success.svg)]()
+[![Status](https://img.shields.io/badge/Status-Complete-success.svg)]()
 
 A quantitative options pricing engine implemented in both C++ and Python. Features analytical Black-Scholes pricing, complete Greeks, Monte Carlo simulation with variance reduction, implied volatility solving via Newton-Raphson, and a Python backtesting interface that prices live options strips using real market data.
 
