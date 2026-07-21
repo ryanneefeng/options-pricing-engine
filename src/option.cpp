@@ -6,7 +6,7 @@
 // Mathematical constants
 const double PI = 3.14159265358979323846;
 const double SQRT_2PI = 2.506628274631000502;
-const double M_SQRT1_2 = 0.7071067811865476;
+const double INV_SQRT2 = 0.7071067811865476;
 
 /**
  * Constructor: Initializes option with given parameters
@@ -56,7 +56,7 @@ double Option::d2() const {
 double Option::normal_cdf(double x) const {
     // Using the complementary error function for better accuracy
     // N(x) = 0.5 * [1 + erf(x/sqrt(2))]
-    	return 0.5 * erfc(-x * M_SQRT1_2);
+    	return 0.5 * erfc(-x * INV_SQRT2);
 }
 
 /**
